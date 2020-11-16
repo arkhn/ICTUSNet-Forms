@@ -18,6 +18,11 @@ const CSVUploadButton: React.FC<CSVUploadButtonProps> = ({ fabClassName }) => {
 
   const handleOnDrop = (data: any[]) => {
     const [columnData, ...dataValues] = data;
+
+    if (!columnData) {
+      return;
+    }
+
     const columnDataKeys = columnData.data as string[];
     const values = dataValues.map((item) => item.data as string[]);
     const patientData = values.map((item) => {
