@@ -50,9 +50,13 @@ const CSVExportButton: React.FC<CSVExportButtonProps> = ({
   const handleClick = () => {
     onClickExport && onClickExport(selectedIndex);
   };
-  const handleToggle = () => {
+  const handleToggle = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
     setIsOpen(!isOpen);
   };
+
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: number
