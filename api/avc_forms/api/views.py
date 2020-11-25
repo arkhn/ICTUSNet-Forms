@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User, Group
+from avc_forms.api.models import Patient
 from rest_framework import viewsets
 from rest_framework import permissions
-from avc_forms.api.serializers import UserSerializer, GroupSerializer
+from avc_forms.api.serializers import UserSerializer, GroupSerializer, PatientSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -19,4 +20,13 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class PatientViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows patients to be viewed or edited.
+    """
+    queryset = Patient.objects.all()
+    serializer_class = PatientSerializer
     permission_classes = [permissions.IsAuthenticated]
