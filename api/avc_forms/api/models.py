@@ -9,7 +9,7 @@ from django.db import models
 class Patient(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    data = JSONField
+    data = JSONField()
 
     class Meta:
         ordering = ['created']

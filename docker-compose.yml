@@ -4,13 +4,17 @@ services:
   db:
     image: postgres:13.1
     environment:
-      - POSTGRES_DB=cohort
+      - POSTGRES_DB=avc
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-    ports:
-      - "5432:5432"
   web:
-    build: .
+    build: ./api
+    environment:
+      - POSTGRES_DB=avc
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
     ports:
       - "8000:8000"
     depends_on:
