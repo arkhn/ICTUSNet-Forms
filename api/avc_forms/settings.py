@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'lg)i(s!g)v(o1gjk3gnk^bvxmd8-1ew=oy5p&l-kwya*1rbb8d'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'secret')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.getenv('DJANGO_DEBUG', 0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'avc_forms.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("POSTGRES_DB") or 'avc',
-        'USER': os.getenv("POSTGRES_USER") or 'postgres',
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD") or '',
-        'HOST': os.getenv("POSTGRES_HOST") or 'localhost',
-        'PORT': os.getenv("POSTGRES_PORT") or 5432,
+        'NAME': os.getenv("POSTGRES_DB", 'avc'),
+        'USER': os.getenv("POSTGRES_USER", 'postgres'),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD", ''),
+        'HOST': os.getenv("POSTGRES_HOST", 'localhost'),
+        'PORT': os.getenv("POSTGRES_PORT", 5432),
     }
 }
 
@@ -124,6 +124,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {

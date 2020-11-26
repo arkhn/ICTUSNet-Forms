@@ -3,22 +3,33 @@ version: "3.8"
 services:
   db:
     image: postgres:13.1
-    environment:
-      - POSTGRES_DB=avc
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-  web:
+    env_file:
+      - ./.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  api:
     build: ./api
-    environment:
-      - POSTGRES_DB=avc
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
-      - DJANGO_SUPERUSER_PASSWORD=password
-      - DJANGO_SUPERUSER_USERNAME=admin
-      - DJANGO_SUPERUSER_EMAIL=admin@arkhn.com
-    ports:
-      - "8000:8000"
+    env_file:
+      - ./.env
     depends_on:
       - db
+    volumes:
+      - api_data:/api
+
+  nginx:
+    image: nginx:1.19.5
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "8080:8080"
+    volumes:
+    - api_data:/api
+    - ./nginx/templates:/etc/nginx/templates
+    depends_on:
+      - api
+
+volumes:
+  pg_data:
+  api_data:
