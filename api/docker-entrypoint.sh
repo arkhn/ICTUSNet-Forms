@@ -18,7 +18,4 @@ django-admin createsuperuser --noinput
 echo "Collect static files"
 python manage.py collectstatic --noinput
 
-# Start server
-echo "Starting server"
-uwsgi --ini avc_forms/uwsgi.ini
-
+exec "$@"

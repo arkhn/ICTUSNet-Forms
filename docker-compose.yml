@@ -10,12 +10,20 @@ services:
 
   api:
     build: ./api
+    command: uwsgi --ini avc_forms/uwsgi.ini
     env_file:
       - ./.env
     depends_on:
       - db
     volumes:
       - api_data:/api
+
+  app:
+    build: ./app
+    env_file:
+      - ./.env
+    volumes:
+      - app_data:/app
 
   nginx:
     image: nginx:1.19.5
@@ -26,10 +34,13 @@ services:
       - "8080:8080"
     volumes:
     - api_data:/api
+    - app_data:/app
     - ./nginx/templates:/etc/nginx/templates
     depends_on:
       - api
+      - app
 
 volumes:
   pg_data:
   api_data:
+  app_data:
