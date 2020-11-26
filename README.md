@@ -1,19 +1,7 @@
 # AVC Forms
 
 ## Usage
-Run `docker-compose up -d` and visit `localhost:8080`
+Run `docker-compose up -d` and visit `host:port` (default `localhost:8080`)
 
 ## Configuration
-Set your custom configuration in `.env` file
-
-## Routes
-* `/api-auth/login` accepts basic authentication
-* `/api-auth/logout`
-* `/users`
-* `/patients`
-```json
-{
-"code": "unique_text_field",
-"data": { "valid_json_field": "" } 
-}
-```
+Set up your custom configuration in the `.env` file
