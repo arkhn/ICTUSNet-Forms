@@ -13,6 +13,7 @@ services:
     command: uwsgi --ini avc_forms/uwsgi.ini
     env_file:
       - ./api/.env
+      - ./postgres/.env
     depends_on:
       - db
     volumes:
