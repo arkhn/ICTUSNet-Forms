@@ -6,13 +6,41 @@
 * Admin interface at `host:port/api/admin`
 
 ## Routes
-* `/api-auth/login` accepts basic authentication
-* `/api-auth/logout`
+Visit `host:port/api` and login for full API documentation
+
+* `/token/`
+  * `POST` request
+    ```json
+    {
+      "username": "username",
+      "password": "password"
+    }
+    ```
+  * Response
+    ```json
+    {
+      "refresh": "refresh_jwt_token",
+      "access": "access_jwt_token"
+    }
+    ```
+* `/token/refresh/`
+  * Request
+    ```shell script
+    curl \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -d '{"refresh":"refresh_token_jwt"}' \
+      http://host:port/api/token/refresh/
+    ```
+  * Response
+    ```json
+    { "access": "access_jwt_token" }
+    ```
 * `/users`
 * `/patients`
-```json
-{
-"code": "unique_text_field",
-"data": { } 
-}
-```
+  * Example request
+    ```shell script
+    curl \
+      -H "Bearer access_jwt_token"
+      http://host:port/api/patients
+    ```
