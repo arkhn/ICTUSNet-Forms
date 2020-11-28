@@ -10,6 +10,7 @@ services:
 
   api:
     build: ./api
+    restart: always
     command: uwsgi --ini avc_forms/uwsgi.ini
     env_file:
       - ./api/.env
