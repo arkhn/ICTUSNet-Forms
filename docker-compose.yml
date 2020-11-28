@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     volumes:
-      - api_data:/home/api
+      - api_data:/tmp
 
   app:
     build: ./app

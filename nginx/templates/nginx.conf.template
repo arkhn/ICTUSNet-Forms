@@ -1,5 +1,5 @@
 upstream django {
-    server unix:/api/avc_forms/avc_forms.sock;
+    server unix:/api/avc_forms.sock;
 }
 
 # configuration of the server
@@ -12,7 +12,7 @@ server {
     client_max_body_size 75M;
 
     location /django_static {
-        alias /api/avc_forms/django_static;
+        alias /api/django_static;
     }
 
     location /api {
@@ -21,7 +21,7 @@ server {
     }
 
     location / {
-        root   /app;
+        root   /app/build;
         index  index.html index.htm;
      }
 }

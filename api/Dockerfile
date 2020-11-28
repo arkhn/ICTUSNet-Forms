@@ -15,7 +15,7 @@ RUN groupadd -r api && useradd --create-home --no-log-init -r -g api api
 USER api:api
 WORKDIR /home/api
 ENV PYTHONPATH=/home/api
-ENV PATH="/home/api/.local/bin:${PATH}"
+ENV PATH /home/api/.local/bin:${PATH}
 ENV DJANGO_SETTINGS_MODULE=avc_forms.settings
 COPY --from=builder --chown=api:api /tmp/wheels wheels
 RUN pip install --user --no-cache wheels/*
