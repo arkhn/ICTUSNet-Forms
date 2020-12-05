@@ -25,6 +25,8 @@ services:
     restart: always
     env_file:
       - ./nginx/.env
+    ports:
+      - "${HOST_PORT:-8080}:${NGINX_PORT:-8080}"
     volumes:
     - api_data:/api
     - ./nginx/templates:/etc/nginx/templates

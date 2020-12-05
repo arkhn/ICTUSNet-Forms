@@ -9,8 +9,6 @@ services:
       - app_data:/app
 
   nginx:
-    ports:
-      - "${HOST_PORT:-8080}:${NGINX_PORT:-8080}"
     volumes:
       - app_data:/app
     depends_on:
