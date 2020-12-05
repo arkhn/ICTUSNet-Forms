@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  db:
+    env_file:
+      - ./postgres/.env.local
+
+  api:
+    env_file:
+      - ./api/.env.local
+      - ./postgres/.env.local
+
+  nginx:
+    env_file:
+      - ./nginx/.env.local
+    ports:
+      - "8080:8080"

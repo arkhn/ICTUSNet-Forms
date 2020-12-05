@@ -1,7 +1,11 @@
 # AVC Forms
 
-## Usage
-Run `docker-compose up -d` and visit `host:port` (default `localhost:8080`)
+## Local development usage
+Add `.env.local` files in the service directories if you want to override the default configuration.
+Run `docker-compose up`. Only the api and the database will run. 
+Visit `host:port/api` (default `localhost:8080/api`) to access the API interface.
+Default user Admin credentials are `{ username: admin, password: admin }`.
 
-## Configuration
-Set up your custom configuration in the `.env` files of each services
+## Production or demo usage
+Run `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up`. 
+Visit `host:port` (default `localhost:8080`).
