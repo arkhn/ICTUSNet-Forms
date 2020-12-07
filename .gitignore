@@ -3,3 +3,4 @@
 **.DS_Store
 **.iml
 **.local
+docker-compose.override.yml

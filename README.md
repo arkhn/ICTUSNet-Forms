@@ -1,8 +1,7 @@
 # AVC Forms
 
 ## Local development usage
-Add a `.env.local` file in a service directory if you want to override its default configuration
-and uncomment the file added in `docker-compose.override.yml`.
+Use a `docker-compose.override.yml` at the root of the project to override the base configuration.
 Run `docker-compose up`. Only the api and the database will run. 
 Visit `host:port/api` (default `localhost:8080/api`) to access the API interface.
 Default user Admin credentials are `{ username: admin, password: admin }`.

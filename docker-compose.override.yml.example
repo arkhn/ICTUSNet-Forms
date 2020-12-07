@@ -6,6 +6,8 @@ services:
 #      - ./postgres/.env.local
 
   api:
+#    environment:
+#      - DEBUG=1
 #    env_file:
 #      - ./api/.env.local
 #      - ./postgres/.env.local
