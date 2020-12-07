@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FormBuilder } from "@arkhn/ui";
 import { FormInputProperty } from "@arkhn/ui/lib/Form/InputTypes";
-import { Button } from "@material-ui/core";
-import { login } from "utils/api";
+import { Button, CircularProgress } from "@material-ui/core";
+import { loginThunk } from "state/user";
+import { useAppDispatch, useAppSelector } from "state/store";
+import { useHistory } from "react-router-dom";
 
 type LoginData = {
   username: string;
@@ -10,6 +12,9 @@ type LoginData = {
 };
 
 const Login: React.FC<{}> = () => {
+  const dispatch = useAppDispatch();
+  const history = useHistory();
+  const { user } = useAppSelector((state) => state);
   const properties: FormInputProperty<LoginData>[] = [
     {
       type: "text",
@@ -25,16 +30,27 @@ const Login: React.FC<{}> = () => {
       // validationRules: { required: "Field required" },
     },
   ];
+
+  useEffect(() => {
+    if (user?.access) {
+      history.push("/avc_viewer");
+    }
+  }, [user, history]);
+
   return (
     <>
       <FormBuilder<LoginData>
         properties={properties}
         formId="login-form"
         defaultValues={{ username: "toto", password: "" }}
-        submit={(data) => login(data.username, data.password)}
+        submit={(data) =>
+          dispatch(
+            loginThunk({ username: data.username, password: data.password })
+          )
+        }
       />
       <Button type="submit" form="login-form">
-        Submit
+        {user?.loading ? <CircularProgress /> : "Submit"}
       </Button>
     </>
   );
