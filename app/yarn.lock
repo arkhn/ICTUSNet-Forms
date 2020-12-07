@@ -2,16 +2,21 @@
 # yarn lockfile v1
 
 
-"@arkhn/ui@^1.7.4":
-  version "1.7.7"
-  resolved "https://registry.yarnpkg.com/@arkhn/ui/-/ui-1.7.7.tgz#20e86131d67b118cba4736f7a6c0ca44a631547d"
-  integrity sha512-WiwZKfsxyVLywPJ0L+7DAPDGQX71rua18Y2IApW3JUDSTYFnT4ug+BN5H+91HDQy5mh7xkLX+Kg0mrxUjJsddw==
+"@arkhn/ui@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@arkhn/ui/-/ui-1.9.2.tgz#4ddf7d7c1e8fb7d4c345435254009bce969c4bfb"
+  integrity sha512-1J63Kh2B+Eh1gtlUzc3TJYxG1iZcBcos0vNv7sDcAYdR5RaQdW1j5nduPttl5hn4U28oyWR/RUUIUxr+W/Z+wg==
   dependencies:
+    "@date-io/date-fns" "1.x"
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
+    "@material-ui/lab" "^4.0.0-alpha.56"
+    "@material-ui/pickers" "^3.2.10"
+    date-fns "^2.16.1"
     material-ui-popup-state "^1.6.1"
     react-beautiful-dnd "^13.0.0"
     react-draggable "^4.4.3"
+    react-hook-form "^6.11.3"
     react-modal "^3.11.2"
     react-virtualized "^9.22.1"
 
@@ -9417,6 +9422,11 @@ react-error-overlay@^6.0.8:
   version "6.0.8"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.8.tgz#474ed11d04fc6bda3af643447d85e9127ed6b5de"
   integrity sha512-HvPuUQnLp5H7TouGq3kzBeioJmXms1wHy9EGjz2OURWBp4qZO6AfGEcnxts1D/CbwPLRAgTMPCEgYhA3sEM4vw==
+
+react-hook-form@^6.11.3:
+  version "6.12.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.12.2.tgz#aa67f47da4730a7bce44768583bdf5b749eed521"
+  integrity sha512-O72E2DXyk7djFqyy6eYi5yESGweKe0CNHHPS0Mx4JazpLbE4Ox+66ldZ23f0J5ZN/krEjDWRD+hUfg5Shvfhtw==
 
 react-hook-form@^6.9.5:
   version "6.11.3"

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@arkhn/ui": "^1.7.4",
+    "@arkhn/ui": "^1.9.2",
     "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -44,7 +44,7 @@
     "@types/uuid": "^8.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env $(cat .env) react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

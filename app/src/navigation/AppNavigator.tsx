@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 
 import { NavBar } from "@arkhn/ui";
 import { makeStyles, Theme, createStyles, Typography } from "@material-ui/core";
@@ -8,6 +8,8 @@ import LanguageSelect from "../components/LanguageSelect";
 import { ReactComponent as Logo } from "../assets/img/arkhn-logo.svg";
 import AVCTableViewer from "../screens/AVCTableViewer";
 import PatientForm from "../screens/PatientForm";
+import PrivateRoute from "./Private";
+import Login from "screens/Login";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,7 +42,7 @@ const AppNavigator: React.FC<{}> = () => {
           title={
             <>
               <div className={classes.titleContainer}>
-                <Link className={classes.link} to={"/"}>
+                <Link className={classes.link} to={"/avc_viewer"}>
                   <Logo className={classes.logo} />
                   <Typography variant="h6" color="primary">
                     AVC Forms
@@ -52,15 +54,17 @@ const AppNavigator: React.FC<{}> = () => {
           }
         />
         <div className={classes.body}>
-          <Route exact path="/">
-            <AVCTableViewer />
-          </Route>
-          <Route exact path="/avc_viewer">
-            <AVCTableViewer />
-          </Route>
-          <Route exact path="/patient_form">
-            <PatientForm />
-          </Route>
+          <Switch>
+            <Route exact path="/">
+              <Login />
+            </Route>
+            <PrivateRoute path="/avc_viewer">
+              <AVCTableViewer />
+            </PrivateRoute>
+            <PrivateRoute path="/patient_form">
+              <PatientForm />
+            </PrivateRoute>
+          </Switch>
         </div>
       </BrowserRouter>
     </>
