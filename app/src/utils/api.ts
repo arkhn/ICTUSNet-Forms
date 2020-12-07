@@ -12,10 +12,9 @@ export const login = async (
   //   body: JSON.stringify({ username, password }),
   // });
   const loginData = await fetch(`http://localhost:8080/api/token/`, {
-    mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     method: "POST",
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password}),
   });
   console.log(loginData);
 };
