@@ -1,20 +1,17 @@
 import { AUTH_API_URL } from "../constants";
 
-const API_URL = `${process.env.REACT_APP_AUTH_API_URL}`;
-
 export const login = async (
   username: string,
   password: string
-): Promise<any> => {
-  console.log(AUTH_API_URL);
-  // const loginRequest = new Request(API_URL, {
-  //   method: "POST",
-  //   body: JSON.stringify({ username, password }),
-  // });
-  const loginData = await fetch(`http://localhost:8080/api/token/`, {
-    headers: { "Content-Type": "application/json" },
+): Promise<{ refresh?: string; access?: string; detail?: string }> => {
+  var data = new FormData();
+  data.set("username", username);
+  data.set("password", password);
+
+  const loginData = await fetch(`${AUTH_API_URL}`, {
     method: "POST",
-    body: JSON.stringify({ username, password}),
+    body: data,
   });
-  console.log(loginData);
+
+  return await loginData.json();
 };
