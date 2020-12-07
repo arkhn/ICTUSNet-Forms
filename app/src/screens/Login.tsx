@@ -27,7 +27,7 @@ const Login: React.FC<{}> = () => {
       name: "password",
       password: true,
       label: "Password",
-      // validationRules: { required: "Field required" },
+      validationRules: { required: "Field required" },
     },
   ];
 
@@ -42,7 +42,6 @@ const Login: React.FC<{}> = () => {
       <FormBuilder<LoginData>
         properties={properties}
         formId="login-form"
-        defaultValues={{ username: "toto", password: "" }}
         submit={(data) =>
           dispatch(
             loginThunk({ username: data.username, password: data.password })

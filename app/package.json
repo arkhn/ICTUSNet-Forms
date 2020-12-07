@@ -44,7 +44,7 @@
     "@types/uuid": "^8.3.0"
   },
   "scripts": {
-    "start": "env $(cat .env) react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
