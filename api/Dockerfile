@@ -1,7 +1,5 @@
 FROM python:3.9.0-slim-buster as builder
 WORKDIR /tmp
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt .
 RUN apt-get update && apt-get install -y libpq-dev gcc
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /tmp/wheels -r requirements.txt
@@ -14,6 +12,8 @@ RUN apt-get update && \
 RUN groupadd -r api && useradd --create-home --no-log-init -r -g api api
 USER api:api
 WORKDIR /home/api
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/home/api
 ENV PATH /home/api/.local/bin:${PATH}
 ENV DJANGO_SETTINGS_MODULE=avc_forms.settings
