@@ -9,3 +9,4 @@ export const {
 
 export const ACCES_TOKEN = "access";
 export const REFRESH_TOKEN = "refresh";
+export const USERNAME_KEY = "username";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useHistory } from "react-router-dom";
 import { v4 as uuid } from "uuid";
@@ -9,8 +9,9 @@ import { jsonToCSV } from "react-papaparse";
 import { useAppSelector, useAppDispatch } from "state/store";
 import {
   createPatientData,
-  deletePatientEntry,
   PatientData,
+  getPatientsThunk,
+  deletePatientEntryThunk,
 } from "state/patientFormSlice";
 
 import { formatPatientDataForExport } from "utils/formUtils";
@@ -68,12 +69,12 @@ const AVCTableViewer: React.FC<{}> = () => {
   };
 
   const onDeletePatient = (patientId: string) => {
-    dispatch(deletePatientEntry([patientId]));
+    dispatch(deletePatientEntryThunk([patientId]));
     setSelectedRowIds(selectedRowIds.filter((id) => id !== patientId));
   };
 
   const onDeleteSelection = () => {
-    dispatch(deletePatientEntry(selectedRowIds));
+    dispatch(deletePatientEntryThunk(selectedRowIds));
     setSelectedRowIds([]);
   };
 
@@ -106,6 +107,10 @@ const AVCTableViewer: React.FC<{}> = () => {
     const csv = jsonToCSV(dataToExport, { columns });
     fileDownload(csv, "patientForms.csv");
   };
+
+  useEffect(() => {
+    dispatch(getPatientsThunk());
+  }, [dispatch]);
 
   return (
     <Container maxWidth="xl">

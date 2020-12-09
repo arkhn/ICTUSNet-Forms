@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { FormBuilder } from "@arkhn/ui";
 import { FormInputProperty } from "@arkhn/ui/lib/Form/InputTypes";
-import { Button, CircularProgress } from "@material-ui/core";
+import { Button, CircularProgress, Container } from "@material-ui/core";
 import { loginThunk } from "state/user";
 import { useAppDispatch, useAppSelector } from "state/store";
 import { useHistory } from "react-router-dom";
@@ -32,26 +32,26 @@ const Login: React.FC<{}> = () => {
   ];
 
   useEffect(() => {
-    if (user?.access) {
+    if (user && user.access) {
       history.push("/avc_viewer");
     }
   }, [user, history]);
 
+  const onSubmit = (data: LoginData) => {
+    dispatch(loginThunk(data));
+  };
+
   return (
-    <>
+    <Container maxWidth="sm">
       <FormBuilder<LoginData>
         properties={properties}
         formId="login-form"
-        submit={(data) =>
-          dispatch(
-            loginThunk({ username: data.username, password: data.password })
-          )
-        }
+        submit={onSubmit}
       />
-      <Button type="submit" form="login-form">
-        {user?.loading ? <CircularProgress /> : "Submit"}
+      <Button type="submit" form="login-form" fullWidth>
+        {user?.loading ? <CircularProgress /> : "Login"}
       </Button>
-    </>
+    </Container>
   );
 };
 
