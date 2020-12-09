@@ -4,7 +4,8 @@ import {
   PayloadAction,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import { login as apiLogin } from "utils/api";
+import { login as apiLogin, logout as apiLogout } from "services/auth";
+import { setTokens } from "utils/tokenManager";
 
 export type UserState = null | {
   username?: string;
@@ -16,27 +17,28 @@ export type UserState = null | {
 
 const initialState: UserState = null;
 
-// Logout action is defined outside of the userSlice because it is being used by all reducers
+/**
+ *  Logout action is defined outside of the userSlice because it is being used by all reducers
+ */
 const logout = createAction("LOGOUT");
 
+/**
+ *
+ */
 const loginThunk = createAsyncThunk<
   void,
   { username: string; password: string },
-  { state: UserState; rejectValue: string | undefined }
+  { state: UserState; rejectValue: void }
 >(
   "user/login",
   async ({ password, username }, { dispatch, rejectWithValue }) => {
     const userCredentials = await apiLogin(username, password);
-    if (userCredentials.refresh && userCredentials.access) {
-      dispatch(
-        userSlice.actions.login({
-          username,
-          refresh: userCredentials.refresh,
-          access: userCredentials.access,
-        })
-      );
+
+    if (userCredentials) {
+      setTokens(userCredentials);
+      dispatch(userSlice.actions.login(userCredentials));
     } else {
-      rejectWithValue(userCredentials.detail);
+      rejectWithValue();
     }
   }
 );
@@ -46,11 +48,12 @@ const userSlice = createSlice({
   initialState: initialState as UserState,
   reducers: {
     login: (state: UserState, action: PayloadAction<UserState>) => {
-      return action.payload;
+      return { ...state, ...action.payload };
     },
   },
   extraReducers: (builder) => {
     builder.addCase(logout, () => {
+      apiLogout();
       return initialState;
     });
     builder.addCase(loginThunk.pending, (state, { meta }) => {
@@ -60,14 +63,13 @@ const userSlice = createSlice({
         requestId: meta.requestId,
       };
     });
-    builder.addCase(loginThunk.fulfilled, (state, { meta }) => {
+    builder.addCase(loginThunk.fulfilled, (state, { meta, payload }) => {
       return {
         ...state,
         loading: meta.requestId !== state?.requestId,
       };
     });
-    builder.addCase(loginThunk.rejected, (state, { meta, payload }) => {
-      console.log("Login rejected with value: ", payload);
+    builder.addCase(loginThunk.rejected, (state, { meta }) => {
       return {
         ...state,
         loading: meta.requestId !== state?.requestId,

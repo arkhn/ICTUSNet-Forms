@@ -4,7 +4,7 @@ import { GetApp } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { CSVReader } from "react-papaparse";
 import { useAppDispatch } from "state/store";
-import { importPatientData } from "state/patientFormSlice";
+import { setPatientEntriesThunk } from "state/patientFormSlice";
 import { formatPatientDataForImport } from "utils/formUtils";
 
 type CSVUploadButtonProps = {
@@ -33,7 +33,7 @@ const CSVUploadButton: React.FC<CSVUploadButtonProps> = ({ fabClassName }) => {
       return patient;
     });
     const patients = patientData.map(formatPatientDataForImport);
-    dispatch(importPatientData(patients));
+    dispatch(setPatientEntriesThunk(patients));
   };
 
   const handleOnError = (...params: any) => {};

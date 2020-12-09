@@ -1,6 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import data from "./fakePatientData.json";
-import { v4 as uuid } from "uuid";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   IdRegionEnum,
   PatientSex,
@@ -17,6 +15,8 @@ import {
   ThrombolyticTreatmentType,
   mTICIScore,
 } from "../utils/enums";
+import { RootState } from "./store";
+import { getPatients, addPatient, deletePatient } from "services/auth";
 
 export type PatientData = {
   firstName: string | null;
@@ -80,80 +80,13 @@ export type PatientColumnData = {
 export type PatientFormState = {
   patients: PatientData[];
   patientColumnData: PatientColumnData;
+  loading: boolean;
+  requestId?: string;
 };
 
 const initialState: PatientFormState = {
-  patients: data.map((item) => ({
-    ...item,
-    firstName: "Pierre",
-    lastName: "Dupont",
-    IPP: "123456",
-    finalmTICIScore: mTICIScore._0,
-    initialmTiciScore: mTICIScore["2c"],
-    age: 4,
-    sex: PatientSex.male,
-    areaResident: true,
-    regionId: IdRegionEnum["FR-OCCEWEST"],
-    id: uuid(),
-    symptomsOnsetDate: new Date(),
-    previousMRS: 4,
-    comorbilities: [Comorbilities.cerebrovascularAccident],
-    riskFactor: [RiskFactors.atrialFibrillation, RiskFactors.dyslipidemia],
-    diastolicBloodPressure: 3,
-    systolicBloodPressure: 14,
-    bloodGlucose: 24,
-    INR: 42,
-    priorAnticoagulationTherapy: true,
-    anticoagulationType: [AnticoagulationType.apixaban],
-    priorAntiplateletTherapy: true,
-    antiplateletType: [
-      AntiplateletType.acetylsalicylic_acid,
-      AntiplateletType.clopidogrel,
-    ],
-    hospitalArrivalDate: new Date(),
-    initialNIHSS: 3,
-    diagnostic: AVCDiagnostic.intracranialHemorrhage,
-    firstImagingType: [ImagingType.notPerformed],
-    firstImagingDate: new Date(),
-    firstImagingASPECTSScore: 3,
-    affectedVessels: [
-      AffectedVesselType.leftAnteriorCerebralArtery,
-      AffectedVesselType.leftPosteriorCerebralArtery,
-    ],
-    administeredReperfusionTreatment: [
-      ReperfusionTreatmentType.cerebralArteryThrombolysisByIntravenousInfusion,
-    ],
-    IVThrombolysisDate: new Date(),
-    thrombolyticTreatmentType: ThrombolyticTreatmentType.alteplase,
-    EVTTransfert: false,
-    OtherEVTCenterDate: new Date(),
-    followingImaging: [
-      ImagingType.arteriography,
-      ImagingType.brainMRIAndBrainStem,
-      ImagingType.carotidArteryDopplerAssessment,
-    ],
-    followingImagingDate: new Date(),
-    followingImagingASPECTSScore: 4,
-    NIHSSPrearteriography: 12,
-    arterialPunctureDate: new Date(),
-    arteriographyAffectedVessel: [
-      AffectedVesselType.leftVertebralArtery,
-      AffectedVesselType.rightInternalCarotidArtery,
-      AffectedVesselType.rightPosteriorCerebralArtery,
-    ],
-
-    EVTModality: EVTModalityType.mechanicalThrombectomy,
-    deviceModel: "machin truc",
-    numberOfPasses: 4,
-    balloonUse: true,
-    stent: StentType.none,
-    newTerritoriesEmbolization: true,
-    revascularizationOrEOPDate: new Date(),
-    neuroImagingUnder36Hrs: true,
-    sich: false,
-    threeMonthsMRS: 6,
-    deathDate: new Date(),
-  })),
+  loading: false,
+  patients: [],
   patientColumnData: [
     {
       dataKey: "firstName",
@@ -352,6 +285,39 @@ export const createPatientData = (patientId: string): PatientData => ({
   deathDate: null,
 });
 
+const getPatientsThunk = createAsyncThunk<
+  PatientData[],
+  void,
+  { state: RootState }
+>("patientForm/getPatients", async () => {
+  return await getPatients();
+});
+
+const deletePatientEntryThunk = createAsyncThunk<
+  void,
+  string[],
+  { state: RootState }
+>("patientForm/deletePatient", async (patientIds, { dispatch }) => {
+  const deletePromises = patientIds.map(deletePatient);
+  const deleteResults = await Promise.all(deletePromises);
+  if (!deleteResults.includes(false)) {
+    dispatch(patientFormSlice.actions.deletePatientEntry(patientIds));
+  }
+});
+
+const setPatientEntriesThunk = createAsyncThunk<
+  void,
+  PatientData[],
+  { state: RootState }
+>("patientForm/setPatientEntry", async (patients, { dispatch }) => {
+  const addPromises = patients.map(addPatient);
+  const addResults = await Promise.all(addPromises);
+
+  if (!addResults.includes(false)) {
+    dispatch(getPatientsThunk());
+  }
+});
+
 const patientFormSlice = createSlice({
   name: "patientForm",
   initialState,
@@ -387,11 +353,18 @@ const patientFormSlice = createSlice({
       );
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getPatientsThunk.pending, (state, { meta }) => {
+      state.loading = true;
+      state.requestId = meta.requestId;
+    });
+    builder.addCase(getPatientsThunk.fulfilled, (state, { payload, meta }) => {
+      state.patients = payload;
+      state.loading = state.requestId !== meta.requestId;
+    });
+  },
 });
 
-export const {
-  setPatientEntry,
-  deletePatientEntry,
-  importPatientData,
-} = patientFormSlice.actions;
+export const { setPatientEntry } = patientFormSlice.actions;
+export { getPatientsThunk, setPatientEntriesThunk, deletePatientEntryThunk };
 export default patientFormSlice.reducer;
