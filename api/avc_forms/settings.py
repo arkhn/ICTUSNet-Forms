@@ -11,10 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-# from dotenv import load_dotenv, find_dotenv
 import os
-
-# load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,14 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'secret')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', "secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.getenv('DJANGO_DEBUG', 1)))
+DEBUG = bool(int(os.environ.get('DJANGO_DEBUG', 1)))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(" ")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS").split(" ") if os.getenv("DJANGO_ALLOWED_HOSTS") else []
 CORS_ALLOW_ALL_ORIGINS = DEBUG
-CORS_ALLOWED_ORIGINS = os.environ.get("DJANGO_CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(" ")
+CORS_ALLOWED_ORIGINS = os.environ\
+    .get("DJANGO_CORS_ALLOWED_ORIGINS", "http://localhost:8080 http://localhost:3000")\
+    .split(" ")
 
 # Application definition
 
@@ -85,11 +84,11 @@ WSGI_APPLICATION = 'avc_forms.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("POSTGRES_DB", 'avc'),
-        'USER': os.getenv("POSTGRES_USER", 'postgres'),
-        'PASSWORD': os.getenv("POSTGRES_PASSWORD", ''),
-        'HOST': os.getenv("POSTGRES_HOST", 'localhost'),
-        'PORT': os.getenv("POSTGRES_PORT", 5432),
+        'NAME': os.environ.get("POSTGRES_DB", "postgres"),
+        'USER': os.environ.get("POSTGRES_USER", "postgres"),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", ""),
+        'HOST': os.environ.get("POSTGRES_HOST", "localhost"),
+        'PORT': os.environ.get("POSTGRES_PORT", 5432),
     }
 }
 

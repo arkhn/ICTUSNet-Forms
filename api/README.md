@@ -1,12 +1,25 @@
 # AVC Forms API
 
-## Usage
+## Recommended requirements
+* Python 3.9 
+* Pip 20.3.1
+* Postresql 13.1
+* Prerequesites for [psycopg](https://www.psycopg.org/docs/install.html)
 
-* API root at `host:port/api` 
-* Admin interface at `host:port/api/admin`
+## Usage
+* Run a postgresql database `postgres` at `localhost:5432` (user `postgres`, no password)
+* Install dependencies `pip install -r requirements.txt`
+* Apply migration `python manage.py migrate` 
+* Create an admin user `python manage.py createsuperuser`
+* Run `python manage.py runserver`
+* Visit `localhost:8080` and login
+
+## Base configuration override for local development
+* Add environment variables in a `.env.local` file in the API project directory
 
 ## Routes
-Visit `host:port/api` and login for full API documentation
+* API documentation at `host:port/api` 
+* Admin interface at `host:port/api/admin`
 
 * `/token/`
   * `POST` request
