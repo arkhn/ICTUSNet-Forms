@@ -13,6 +13,7 @@ type DateInputProps = {
   onChange: (date: Date | null) => void;
   error?: boolean;
   helperText?: string;
+  disabled?: boolean;
 };
 
 const DateInput: React.FC<DateInputProps> = ({ name, ...props }) => {

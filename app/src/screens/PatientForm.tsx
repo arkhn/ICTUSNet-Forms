@@ -599,6 +599,9 @@ const PatientForm: React.FC<{}> = () => {
               render={({ ...props }) => (
                 <DateInput
                   {...props}
+                  disabled={watch("firstImagingType")?.includes(
+                    ImagingType.notPerformed
+                  )}
                   error={undefined !== errors.firstImagingDate}
                   helperText={
                     errors.firstImagingDate && errors.firstImagingDate.message
@@ -625,6 +628,9 @@ const PatientForm: React.FC<{}> = () => {
               title={t("firstImagingASPECTSScore")}
               name="firstImagingASPECTSScore"
               type="number"
+              disabled={watch("firstImagingType")?.includes(
+                ImagingType.notPerformed
+              )}
               inputRef={register({
                 min: { value: 0, message: t("noNegativeNumber") },
                 max: { value: 10, message: t("noMoreThan", { max: 10 }) },
@@ -783,6 +789,7 @@ const PatientForm: React.FC<{}> = () => {
               render={({ ...props }) => (
                 <DateInput
                   {...props}
+                  disabled={!watch().EVTTransfert}
                   error={undefined !== errors.OtherEVTCenterDate}
                   helperText={
                     errors.OtherEVTCenterDate &&
@@ -838,6 +845,9 @@ const PatientForm: React.FC<{}> = () => {
               render={({ ...props }) => (
                 <DateInput
                   {...props}
+                  disabled={watch("followingImaging")?.includes(
+                    ImagingType.notPerformed
+                  )}
                   error={undefined !== errors.followingImagingDate}
                   helperText={
                     errors.followingImagingDate &&
@@ -865,6 +875,9 @@ const PatientForm: React.FC<{}> = () => {
               title={t("followingImagingASPECTSScore")}
               name="followingImagingASPECTSScore"
               type="number"
+              disabled={watch("followingImaging")?.includes(
+                ImagingType.notPerformed
+              )}
               inputRef={register({
                 min: { value: 0, message: t("noNegativeNumber") },
                 max: { value: 10, message: t("noMoreThan", { max: 10 }) },
