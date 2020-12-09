@@ -8,6 +8,6 @@ RUN yarn
 COPY . .
 RUN yarn build
 
-FROM busybox
+FROM busybox:1.32.0
 WORKDIR /app
 COPY --from=builder /app/build build
