@@ -8,6 +8,10 @@ services:
     volumes:
       - app_data:/app
 
+  api:
+    environment:
+      - DJANGO_DEBUG=0
+
   nginx:
     volumes:
       - app_data:/app
