@@ -16,7 +16,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/home/api
 ENV PATH /home/api/.local/bin:${PATH}
-ENV DJANGO_SETTINGS_MODULE=avc_forms.settings
 COPY --from=builder --chown=api:api /tmp/wheels wheels
 RUN pip install --user --no-cache wheels/* && rm -rf wheels
 COPY --chown=api:api . .

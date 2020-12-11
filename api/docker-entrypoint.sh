@@ -16,6 +16,6 @@ python manage.py migrate
 
 # Create superuser
 echo "Create superuser"
-django-admin createsuperuser --noinput
+python manage.py createsuperuser --noinput
 
 exec "$@"
