@@ -42,7 +42,7 @@ const NavigationBar: React.FC<{}> = () => {
               </Typography>
             </Link>
           </div>
-          {user && (
+          {user && user.access && (
             <IconButton onClick={() => dispatch(logout())}>
               <ExitToApp htmlColor="#F2574B" />
             </IconButton>

@@ -12,7 +12,12 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "state/store";
-import { PatientData, setPatientEntry } from "state/patientFormSlice";
+import {
+  PatientData,
+  setPatientEntry,
+  editPatientEntryThunk,
+  setPatientEntriesThunk,
+} from "state/patientFormSlice";
 
 import DateInput from "components/inputCards/DateInput";
 import TextInput from "components/inputCards/TextInput";
@@ -45,8 +50,8 @@ const PatientForm: React.FC<{}> = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const location = useLocation<PatientData | undefined>();
-  const patient = location.state;
+  const location = useLocation<{ patient: PatientData; creation: boolean }>();
+  const { patient, creation } = location.state;
   const {
     register,
     handleSubmit,
@@ -86,7 +91,11 @@ const PatientForm: React.FC<{}> = () => {
   }
 
   const onSubmit: SubmitHandler<PatientData> = (data) => {
-    dispatch(setPatientEntry({ ...data, id: patient.id }));
+    if (creation) {
+      dispatch(setPatientEntriesThunk([{ ...data, id: patient.id }]));
+    } else {
+      dispatch(editPatientEntryThunk({ ...data, id: patient.id }));
+    }
     history.push("/avc_viewer");
   };
 

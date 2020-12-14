@@ -16,7 +16,13 @@ import {
   mTICIScore,
 } from "../utils/enums";
 import { RootState } from "./store";
-import { getPatients, addPatient, deletePatient } from "services/auth";
+import {
+  getPatients,
+  addPatient,
+  deletePatient,
+  editPatient,
+} from "services/auth";
+import { enqueueSnackbar } from "./notifSlice";
 
 export type PatientData = {
   firstName: string | null;
@@ -302,6 +308,12 @@ const deletePatientEntryThunk = createAsyncThunk<
   const deleteResults = await Promise.all(deletePromises);
   if (!deleteResults.includes(false)) {
     dispatch(patientFormSlice.actions.deletePatientEntry(patientIds));
+    dispatch(
+      enqueueSnackbar({
+        message: "patientDeleteSuccess",
+        options: { variant: "success" },
+      })
+    );
   }
 });
 
@@ -315,6 +327,41 @@ const setPatientEntriesThunk = createAsyncThunk<
 
   if (!addResults.includes(false)) {
     dispatch(getPatientsThunk());
+    dispatch(
+      enqueueSnackbar({
+        message: "patientAddSuccess",
+        options: { variant: "success" },
+      })
+    );
+  } else {
+    dispatch(
+      enqueueSnackbar({
+        message: "patientAddFailure",
+        options: { variant: "error" },
+      })
+    );
+  }
+});
+
+const editPatientEntryThunk = createAsyncThunk<
+  void,
+  PatientData,
+  { state: RootState }
+>("patientForm/editPatientEntry", async (patient, { dispatch }) => {
+  const editResult = await editPatient(patient);
+
+  if (editResult) {
+    dispatch(getPatientsThunk());
+    dispatch(
+      enqueueSnackbar({
+        message: "editSuccess",
+        options: { variant: "success" },
+      })
+    );
+  } else {
+    dispatch(
+      enqueueSnackbar({ message: "editFailure", options: { variant: "error" } })
+    );
   }
 });
 
@@ -366,5 +413,10 @@ const patientFormSlice = createSlice({
 });
 
 export const { setPatientEntry } = patientFormSlice.actions;
-export { getPatientsThunk, setPatientEntriesThunk, deletePatientEntryThunk };
+export {
+  getPatientsThunk,
+  setPatientEntriesThunk,
+  deletePatientEntryThunk,
+  editPatientEntryThunk,
+};
 export default patientFormSlice.reducer;

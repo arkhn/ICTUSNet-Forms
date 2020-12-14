@@ -5,6 +5,7 @@ import { Button, CircularProgress, Container } from "@material-ui/core";
 import { loginThunk } from "state/user";
 import { useAppDispatch, useAppSelector } from "state/store";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type LoginData = {
   username: string;
@@ -15,19 +16,20 @@ const Login: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const { user } = useAppSelector((state) => state);
+  const { t } = useTranslation();
   const properties: FormInputProperty<LoginData>[] = [
     {
       type: "text",
       name: "username",
       label: "Login",
-      validationRules: { required: "Field required" },
+      validationRules: { required: t("requiredField") },
     },
     {
       type: "text",
       name: "password",
       password: true,
       label: "Password",
-      validationRules: { required: "Field required" },
+      validationRules: { required: t("requiredField") },
     },
   ];
 

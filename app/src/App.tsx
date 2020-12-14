@@ -8,6 +8,8 @@ import {
 import AppNavigator from "./navigation/AppNavigator";
 import theme from "./style/theme";
 import store from "./state/store";
+import { SnackbarProvider } from "notistack";
+import Notifier from "components/Notifier";
 
 function App() {
   return (
@@ -15,7 +17,13 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Suspense fallback={<CircularProgress />}>
-          <AppNavigator />
+          <SnackbarProvider
+            anchorOrigin={{ horizontal: "center", vertical: "top" }}
+            autoHideDuration={3000}
+          >
+            <Notifier />
+            <AppNavigator />
+          </SnackbarProvider>
         </Suspense>
       </ThemeProvider>
     </Provider>

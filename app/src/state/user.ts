@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { login as apiLogin, logout as apiLogout } from "services/auth";
 import { setTokens } from "utils/tokenManager";
+import { enqueueSnackbar } from "./notifSlice";
 
 export type UserState = null | {
   username?: string;
@@ -33,11 +34,16 @@ const loginThunk = createAsyncThunk<
   "user/login",
   async ({ password, username }, { dispatch, rejectWithValue }) => {
     const userCredentials = await apiLogin(username, password);
-
     if (userCredentials) {
       setTokens(userCredentials);
       dispatch(userSlice.actions.login(userCredentials));
     } else {
+      dispatch(
+        enqueueSnackbar({
+          message: "authenticationError",
+          options: { variant: "error" },
+        })
+      );
       rejectWithValue();
     }
   }

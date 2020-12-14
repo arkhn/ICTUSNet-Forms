@@ -10,16 +10,20 @@ export const login = async (
   username: string,
   password: string
 ): Promise<{ username: string; access: string; refresh: string } | null> => {
-  const authTokenResponse = await api.post<{ access: string; refresh: string }>(
-    "token/",
-    { username, password }
-  );
+  try {
+    const authTokenResponse = await api.post<{
+      access: string;
+      refresh: string;
+    }>("token/", { username, password });
 
-  const { access, refresh } = authTokenResponse.data;
+    const { access, refresh } = authTokenResponse.data;
 
-  if (access && refresh) {
-    return { access, refresh, username };
-  } else {
+    if (access && refresh) {
+      return { access, refresh, username };
+    } else {
+      return null;
+    }
+  } catch (error) {
     return null;
   }
 };
@@ -32,7 +36,7 @@ export const getPatients = async () => {
   const patientsResponse = await api.get<{
     count: number;
     results: { data: { [dataKey: string]: string }; code: string }[];
-  }>("patients");
+  }>("patients/");
   const { count, results } = patientsResponse.data;
 
   if (count > 0) {
@@ -63,7 +67,7 @@ const getPatientUrl = async (patientId: string): Promise<string | null> => {
       code: string;
       url: string;
     }[];
-  }>("patients");
+  }>("patients/");
   const { results } = patientsResponse.data;
   const patient = results.find((r) => r.code === patientId);
   if (patient) {
@@ -81,4 +85,21 @@ export const deletePatient = async (patientId: string): Promise<boolean> => {
   } else {
     return false;
   }
+};
+
+export const editPatient = async (patient: PatientData): Promise<boolean> => {
+  const patientUrl = await getPatientUrl(patient.id);
+
+  if (patientUrl) {
+    try {
+      await api.put(patientUrl, {
+        data: formatPatientDataForExport()(patient),
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  return false;
 };

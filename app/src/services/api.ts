@@ -20,26 +20,16 @@ api.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-
-    if (
-      error.response.status === 401 &&
-      originalRequest.url.startsWith(`token/`)
-    ) {
-      deleteTokens();
-      return Promise.reject(error);
-    }
-
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
+    if (error.response.status === 401) {
       const success = await refreshToken();
       if (!success) {
         deleteTokens();
         return Promise.reject(error);
       }
-      return axios(originalRequest);
+      return api(originalRequest);
+    } else {
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
   }
 );
 
