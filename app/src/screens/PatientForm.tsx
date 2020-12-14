@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "state/store";
 import {
   PatientData,
-  setPatientEntry,
   editPatientEntryThunk,
   setPatientEntriesThunk,
 } from "state/patientFormSlice";

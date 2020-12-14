@@ -10,7 +10,7 @@ def main():
     """Run administrative tasks."""
 
     # Load optional .env.local file in the project directory to override base configuration
-    env_path = Path('.') / '.env.local'
+    env_path = Path('.') / '.env.local' if Path('./.env.local').is_file() else Path('.') / '.env'
     load_dotenv(dotenv_path=env_path)
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'avc_forms.settings')

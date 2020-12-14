@@ -49,7 +49,7 @@ const Notifier: React.FC<{}> = () => {
         storeDisplayed(key);
       }
     );
-  }, [notifications, closeSnackbar, enqueueSnackbar, dispatch]);
+  }, [notifications, closeSnackbar, enqueueSnackbar, t, dispatch]);
 
   return null;
 };
