@@ -5,9 +5,11 @@ import {
 } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 
-import patientForm from "./patientFormSlice";
+import patientForm from "state/patientFormSlice";
+import user from "state/user";
+import notif from "state/notifSlice";
 
-const rootReducer = combineReducers({ patientForm });
+const rootReducer = combineReducers({ patientForm, user, notif });
 
 const store = configureStore({
   reducer: rootReducer,

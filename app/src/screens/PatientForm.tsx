@@ -12,7 +12,11 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "state/store";
-import { PatientData, setPatientEntry } from "state/patientFormSlice";
+import {
+  PatientData,
+  editPatientEntryThunk,
+  setPatientEntriesThunk,
+} from "state/patientFormSlice";
 
 import DateInput from "components/inputCards/DateInput";
 import TextInput from "components/inputCards/TextInput";
@@ -45,8 +49,8 @@ const PatientForm: React.FC<{}> = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const location = useLocation<PatientData | undefined>();
-  const patient = location.state;
+  const location = useLocation<{ patient: PatientData; creation: boolean }>();
+  const { patient, creation } = location.state;
   const {
     register,
     handleSubmit,
@@ -86,7 +90,11 @@ const PatientForm: React.FC<{}> = () => {
   }
 
   const onSubmit: SubmitHandler<PatientData> = (data) => {
-    dispatch(setPatientEntry({ ...data, id: patient.id }));
+    if (creation) {
+      dispatch(setPatientEntriesThunk([{ ...data, id: patient.id }]));
+    } else {
+      dispatch(editPatientEntryThunk({ ...data, id: patient.id }));
+    }
     history.push("/avc_viewer");
   };
 
@@ -599,6 +607,9 @@ const PatientForm: React.FC<{}> = () => {
               render={({ ...props }) => (
                 <DateInput
                   {...props}
+                  disabled={watch("firstImagingType")?.includes(
+                    ImagingType.notPerformed
+                  )}
                   error={undefined !== errors.firstImagingDate}
                   helperText={
                     errors.firstImagingDate && errors.firstImagingDate.message
@@ -625,6 +636,9 @@ const PatientForm: React.FC<{}> = () => {
               title={t("firstImagingASPECTSScore")}
               name="firstImagingASPECTSScore"
               type="number"
+              disabled={watch("firstImagingType")?.includes(
+                ImagingType.notPerformed
+              )}
               inputRef={register({
                 min: { value: 0, message: t("noNegativeNumber") },
                 max: { value: 10, message: t("noMoreThan", { max: 10 }) },
@@ -783,6 +797,7 @@ const PatientForm: React.FC<{}> = () => {
               render={({ ...props }) => (
                 <DateInput
                   {...props}
+                  disabled={!watch().EVTTransfert}
                   error={undefined !== errors.OtherEVTCenterDate}
                   helperText={
                     errors.OtherEVTCenterDate &&
@@ -838,6 +853,9 @@ const PatientForm: React.FC<{}> = () => {
               render={({ ...props }) => (
                 <DateInput
                   {...props}
+                  disabled={watch("followingImaging")?.includes(
+                    ImagingType.notPerformed
+                  )}
                   error={undefined !== errors.followingImagingDate}
                   helperText={
                     errors.followingImagingDate &&
@@ -865,6 +883,9 @@ const PatientForm: React.FC<{}> = () => {
               title={t("followingImagingASPECTSScore")}
               name="followingImagingASPECTSScore"
               type="number"
+              disabled={watch("followingImaging")?.includes(
+                ImagingType.notPerformed
+              )}
               inputRef={register({
                 min: { value: 0, message: t("noNegativeNumber") },
                 max: { value: 10, message: t("noMoreThan", { max: 10 }) },

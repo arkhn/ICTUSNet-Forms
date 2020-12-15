@@ -1,41 +1,40 @@
 version: "3.8"
 
 services:
-  db:
-    image: postgres:13.1
-    env_file:
-      - ./.env
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-
   api:
     build: ./api
+    restart: always
     command: uwsgi --ini avc_forms/uwsgi.ini
     env_file:
-      - ./.env
+      - ./api/.env
     depends_on:
       - db
     volumes:
-      - api_data:/api
+      - api_data:/tmp
 
   app:
     build: ./app
-    env_file:
-      - ./.env
     volumes:
       - app_data:/app
+
+  db:
+    image: postgres:13.1
+    env_file:
+      - ./api/.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
 
   nginx:
     image: nginx:1.19.5
     restart: always
     env_file:
-      - ./.env
+      - ./nginx/.env
     ports:
-      - "8080:8080"
+      - "${HOST_PORT:-8080}:${NGINX_PORT:-8080}"
     volumes:
-    - api_data:/api
-    - app_data:/app
-    - ./nginx/templates:/etc/nginx/templates
+      - api_data:/api
+      - app_data:/app
+      - ./nginx/templates:/etc/nginx/templates
     depends_on:
       - api
       - app

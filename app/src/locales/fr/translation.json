@@ -137,5 +137,13 @@
   "intracranialThrombectomy": "Thrombectomie intracrânienne",
   "intracranialVesselThrombolysis": "Thrombolyse du vaisseau intracrânien",
   "alteplase": "Alteplase",
-  "tenecteplase": "Tenectéplase"
+  "tenecteplase": "Tenectéplase",
+  "authenticationError": "Erreur d'authentification: Mauvais Login ou Mot de passe",
+  "patientAddSuccess": "Ajout de patient(s) réussi !",
+  "patientAddFailure": "Echec d'ajout de patient(s)",
+  "patientDeleteSuccess": "Patient(s) supprimé(s)",
+  "deletePatientsTitle": "Supprimer patients",
+  "deletePatientsQuestion": "Êtes-vous sûr(e) de vouloir supprimer la selection ?",
+  "editSuccess": "Patient modifié avec succès",
+  "editFailure": "Echec d'édition du patient"
 }

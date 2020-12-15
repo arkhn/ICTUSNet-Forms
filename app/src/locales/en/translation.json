@@ -137,5 +137,13 @@
   "intracranialThrombectomy": "Intracranial thrombectomy",
   "intracranialVesselThrombolysis": "Thrombolysis of intracranial vessel",
   "alteplase": "Alteplase",
-  "tenecteplase": "Tenecteplase"
+  "tenecteplase": "Tenecteplase",
+  "authenticationError": "Authentication Failed: Wrong Login or Password",
+  "patientAddSuccess": "Patient(s) added successfully !",
+  "patientAddFailure": "Patient(s) add failure",
+  "patientDeleteSuccess": "Patient(s) deleted",
+  "deletePatientsTitle": "Delete patients",
+  "deletePatientsQuestion": "Are you sure to delete patient row(s) ?",
+  "editSuccess": "Patient successfully edited",
+  "editFailure": "Patient edition failed"
 }

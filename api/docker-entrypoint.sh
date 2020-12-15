@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Collect static files
+echo "Collect static files"
+python manage.py collectstatic --noinput
+
 # Wait for db
 echo "Waiting for postgres..."
 while ! nc -z "$POSTGRES_HOST" "$POSTGRES_PORT"; do
@@ -12,10 +16,6 @@ python manage.py migrate
 
 # Create superuser
 echo "Create superuser"
-django-admin createsuperuser --noinput
-
-# Collect static files
-echo "Collect static files"
-python manage.py collectstatic --noinput
+python manage.py createsuperuser --noinput
 
 exec "$@"

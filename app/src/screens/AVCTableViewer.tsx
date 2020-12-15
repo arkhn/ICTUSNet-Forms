@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { useHistory } from "react-router-dom";
 import { v4 as uuid } from "uuid";
@@ -9,8 +9,9 @@ import { jsonToCSV } from "react-papaparse";
 import { useAppSelector, useAppDispatch } from "state/store";
 import {
   createPatientData,
-  deletePatientEntry,
   PatientData,
+  getPatientsThunk,
+  deletePatientEntryThunk,
 } from "state/patientFormSlice";
 
 import { formatPatientDataForExport } from "utils/formUtils";
@@ -18,6 +19,7 @@ import { Container, Fab, makeStyles, Paper } from "@material-ui/core";
 import TableViewer from "components/TableViewer";
 import CSVUploadButton from "components/CSVUploadButton";
 import CSVExportButton from "components/CSVExportButton";
+import Dialog from "components/Dialog";
 
 import { Add, Delete } from "@material-ui/icons";
 
@@ -52,6 +54,8 @@ const AVCTableViewer: React.FC<{}> = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
+  const [patientIdsToDelete, setPatientIdsToDelete] = useState<string[]>([]);
+  const [isDialogOpen, setDialogOpen] = useState(false);
   const { data, columns } = useAppSelector((state) => ({
     data: state.patientForm.patients,
     columns: state.patientForm.patientColumnData,
@@ -59,22 +63,30 @@ const AVCTableViewer: React.FC<{}> = () => {
 
   const onAddPatientClick = () => {
     const newPatient = createPatientData(uuid());
-    history.push(`/patient_form`, newPatient);
+    history.push(`/patient_form`, { patient: newPatient, creation: true });
   };
 
   const onEditPatient = (patientId: string) => {
     const patient = data.find((item) => item.id === patientId);
-    patient && history.push(`/patient_form`, patient);
+    patient && history.push(`/patient_form`, { patient, creation: false });
   };
 
-  const onDeletePatient = (patientId: string) => {
-    dispatch(deletePatientEntry([patientId]));
-    setSelectedRowIds(selectedRowIds.filter((id) => id !== patientId));
+  const openDialog = (patientId?: string) => {
+    if (patientId) {
+      setPatientIdsToDelete([patientId]);
+    } else {
+      setPatientIdsToDelete(selectedRowIds);
+    }
+    setDialogOpen(true);
   };
 
-  const onDeleteSelection = () => {
-    dispatch(deletePatientEntry(selectedRowIds));
-    setSelectedRowIds([]);
+  const onDelete = () => {
+    dispatch(deletePatientEntryThunk(patientIdsToDelete));
+    setSelectedRowIds(
+      selectedRowIds.filter((id) => !patientIdsToDelete.includes(id))
+    );
+    setPatientIdsToDelete([]);
+    setDialogOpen(false);
   };
 
   const exportToCsv = (optionIndex: number) => {
@@ -107,6 +119,10 @@ const AVCTableViewer: React.FC<{}> = () => {
     fileDownload(csv, "patientForms.csv");
   };
 
+  useEffect(() => {
+    dispatch(getPatientsThunk());
+  }, [dispatch]);
+
   return (
     <Container maxWidth="xl">
       <div className={classes.fabContainer}>
@@ -132,7 +148,7 @@ const AVCTableViewer: React.FC<{}> = () => {
           <Fab
             className={clsx(classes.fab, classes.redFab)}
             disabled={selectedRowIds.length === 0}
-            onClick={onDeleteSelection}
+            onClick={() => openDialog()}
           >
             <Delete />
           </Fab>
@@ -142,12 +158,21 @@ const AVCTableViewer: React.FC<{}> = () => {
         <TableViewer
           data={data}
           columns={columns}
-          onClickDelete={onDeletePatient}
+          onClickDelete={openDialog}
           onClickEdit={onEditPatient}
           onRowSelect={setSelectedRowIds}
           selectedRowIds={selectedRowIds}
         />
       </Paper>
+      <Dialog
+        open={isDialogOpen}
+        title={t("deletePatientsTitle")}
+        agreeButtonTitle={t("yes")}
+        refuseButtonTitle={t("no")}
+        content={t("deletePatientsQuestion")}
+        onClose={() => setDialogOpen(false)}
+        onAgree={onDelete}
+      />
     </Container>
   );
 };

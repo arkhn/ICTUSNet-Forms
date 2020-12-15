@@ -1,7 +1,7 @@
 # AVC Forms
 
 ## Usage
-Run `docker-compose up -d` and visit `host:port` (default `localhost:8080`)
+Run `docker-compose up`. 
+Visit `host:port` (default `localhost:8080`).
+Default user Admin credentials are `{ username: admin, password: admin }`.
 
-## Configuration
-Set up your custom configuration in the `.env` file

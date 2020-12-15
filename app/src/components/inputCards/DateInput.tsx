@@ -13,34 +13,38 @@ type DateInputProps = {
   onChange: (date: Date | null) => void;
   error?: boolean;
   helperText?: string;
+  disabled?: boolean;
 };
 
-const DateInput: React.FC<DateInputProps> = ({ name, ...props }) => {
-  const { t } = useTranslation();
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="h6">{t(name)}</Typography>
-        <FormControl style={{ minWidth: 120, maxWidth: 600 }}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDateTimePicker
-              disableFuture
-              fullWidth
-              ampm={false}
-              variant="inline"
-              format="dd/MM/yyyy HH:mm"
-              margin="normal"
-              id={`${name}-date-picker`}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-              {...props}
-            />
-          </MuiPickersUtilsProvider>
-        </FormControl>
-      </CardContent>
-    </Card>
-  );
-};
+const DateInput: React.FC<DateInputProps> = React.forwardRef(
+  ({ name, ...props }, ref) => {
+    const { t } = useTranslation();
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="h6">{t(name)}</Typography>
+          <FormControl style={{ minWidth: 120, maxWidth: 600 }}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDateTimePicker
+                disableFuture
+                fullWidth
+                ampm={false}
+                variant="inline"
+                format="dd/MM/yyyy HH:mm"
+                margin="normal"
+                id={`${name}-date-picker`}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+                {...props}
+                inputRef={ref}
+              />
+            </MuiPickersUtilsProvider>
+          </FormControl>
+        </CardContent>
+      </Card>
+    );
+  }
+);
 
 export default DateInput;
