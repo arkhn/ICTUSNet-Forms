@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@arkhn/ui": "^1.9.2",
+    "@arkhn/ui": "^1.9.8",
     "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -20,7 +20,6 @@
     "react": "^17.0.1",
     "react-country-flag": "^2.3.0",
     "react-dom": "^17.0.1",
-    "react-hook-form": "^6.9.5",
     "react-i18next": "^11.7.3",
     "react-papaparse": "^3.9.0",
     "react-redux": "^7.2.1",

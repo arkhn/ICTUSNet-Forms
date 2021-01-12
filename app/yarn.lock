@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@arkhn/ui@^1.9.2":
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/@arkhn/ui/-/ui-1.9.2.tgz#4ddf7d7c1e8fb7d4c345435254009bce969c4bfb"
-  integrity sha512-1J63Kh2B+Eh1gtlUzc3TJYxG1iZcBcos0vNv7sDcAYdR5RaQdW1j5nduPttl5hn4U28oyWR/RUUIUxr+W/Z+wg==
+"@arkhn/ui@^1.9.8":
+  version "1.9.8"
+  resolved "https://registry.yarnpkg.com/@arkhn/ui/-/ui-1.9.8.tgz#25433315ca7a056e141955bf89270098d0259e3f"
+  integrity sha512-USFcSG7lTlXz5MZdqA/Z9gFg1Xs/Bwhmhlvkx4rUk+FZTKMxMU9e1iu1e/wJ8qB33bWoODSp+TXAK4/e3cKceQ==
   dependencies:
     "@date-io/date-fns" "1.x"
     "@material-ui/core" "^4.11.0"
@@ -9442,11 +9442,6 @@ react-hook-form@^6.11.3:
   version "6.12.2"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.12.2.tgz#aa67f47da4730a7bce44768583bdf5b749eed521"
   integrity sha512-O72E2DXyk7djFqyy6eYi5yESGweKe0CNHHPS0Mx4JazpLbE4Ox+66ldZ23f0J5ZN/krEjDWRD+hUfg5Shvfhtw==
-
-react-hook-form@^6.9.5:
-  version "6.11.3"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.11.3.tgz#7de409d4e100452ac0d3255780b3af3d3027d87a"
-  integrity sha512-RWBQ2FdCI6B247hna8LM1oPThvZiGM8wJkTTOLHRHhSBgD5JrTBYOrteLRo7qKXP9CdVYSAK1kjPs1JCqeWb3g==
 
 react-i18next@^11.7.3:
   version "11.7.3"

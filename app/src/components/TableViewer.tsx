@@ -221,8 +221,14 @@ const TableViewer: React.FC<TableViewerProps> = ({
               value.getMonth() + 1
             }/${value.getFullYear()} ${value.toLocaleTimeString()}`;
           } else if (isArray(value)) {
-            //@ts-ignore
-            cellContent = value.map((val: any) => t(val) as string).join(" ; ");
+            cellContent = value
+              //@ts-ignore
+              .map((val: any) =>
+                val.id ? (t(val.id) as string) : (t(val) as string)
+              )
+              .join(" ; ");
+          } else if (value.id) {
+            cellContent = t(value.id).toString();
           }
         }
         break;

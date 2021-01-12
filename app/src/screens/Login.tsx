@@ -22,14 +22,14 @@ const Login: React.FC<{}> = () => {
       type: "text",
       name: "username",
       label: "Login",
-      validationRules: { required: t("requiredField") },
+      validationRules: { required: t("requiredField") as string },
     },
     {
       type: "text",
       name: "password",
       password: true,
       label: "Password",
-      validationRules: { required: t("requiredField") },
+      validationRules: { required: t("requiredField") as string },
     },
   ];
 

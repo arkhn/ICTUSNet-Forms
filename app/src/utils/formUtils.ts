@@ -11,6 +11,7 @@ import {
   ReperfusionTreatmentType,
   ThrombolyticTreatmentType,
   StentType,
+  IdRegionEnum,
 } from "./enums";
 import { v4 as uuid } from "uuid";
 
@@ -127,11 +128,16 @@ export const formatPatientDataForExport = (
   const dateShift = Math.random() * 1000000000 * (isPositive ? 1 : -1);
   for (const dataKey of dataKeys) {
     switch (dataKey) {
+      case "regionId": {
+        const value = patient.regionId;
+        formattedPatient[dataKey] = value?.id ?? "";
+        break;
+      }
       case "sex": {
         const entries = Object.entries(patientSexCodes);
         const value = patient.sex;
         formattedPatient[dataKey] =
-          entries.find((entry) => entry[1] === value)?.[0] ?? "";
+          entries.find((entry) => entry[1] === value?.id)?.[0] ?? "";
         break;
       }
 
@@ -141,7 +147,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -153,7 +160,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -165,7 +173,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -177,7 +186,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -187,7 +197,7 @@ export const formatPatientDataForExport = (
         const entries = Object.entries(diagnosticCodes);
         const value = patient.diagnostic;
         formattedPatient[dataKey] =
-          entries.find((entry) => entry[1] === value)?.[0] ?? "";
+          entries.find((entry) => entry[1] === value?.id)?.[0] ?? "";
         break;
       }
 
@@ -197,7 +207,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -209,7 +220,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -221,7 +233,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -232,7 +245,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -244,7 +258,8 @@ export const formatPatientDataForExport = (
         formattedPatient[dataKey] =
           values
             ?.map(
-              (value) => entries.find((entry) => entry[1] === value)?.[0] ?? ""
+              (value) =>
+                entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
             )
             .join(" ; ") ?? "";
         break;
@@ -254,7 +269,7 @@ export const formatPatientDataForExport = (
         const entries = Object.entries(thrombolyticTreatmentCodes);
         const value = patient.thrombolyticTreatmentType;
         formattedPatient[dataKey] =
-          entries.find((entry) => entry[1] === value)?.[0] ?? "";
+          entries.find((entry) => entry[1] === value?.id)?.[0] ?? "";
         break;
       }
 
@@ -262,7 +277,7 @@ export const formatPatientDataForExport = (
         const entries = Object.entries(stentCodes);
         const value = patient.stent;
         formattedPatient[dataKey] =
-          entries.find((entry) => entry[1] === value)?.[0] ?? "";
+          entries.find((entry) => entry[1] === value?.id)?.[0] ?? "";
         break;
       }
 
@@ -284,7 +299,8 @@ export const formatPatientDataForExport = (
       }
 
       default: {
-        formattedPatient[dataKey] = patient[dataKey]?.toString() ?? "";
+        formattedPatient[dataKey] = JSON.stringify(patient[dataKey]);
+        // formattedPatient[dataKey] = patient[dataKey]?.toString() ?? "";
         break;
       }
     }
@@ -309,98 +325,136 @@ export const formatPatientDataForImport = (patientData: {
     const dataKeyValue = patientData[dataKey];
     if (dataKeyValue.toString() !== "99" || dataKey === "age") {
       switch (dataKey as keyof PatientData) {
+        case "regionId": {
+          if (
+            Object.values(IdRegionEnum).includes(dataKeyValue as IdRegionEnum)
+          ) {
+            patient.regionId = {
+              id: dataKeyValue as IdRegionEnum,
+              label: dataKeyValue,
+            };
+          }
+          break;
+        }
         case "sex": {
           const value = patientSexCodes[dataKeyValue] ?? null;
-          patient.sex = value;
+          patient.sex = { id: value, label: value };
           break;
         }
 
         case "comorbilities": {
           const values = dataKeyValue.split(" ; ");
           patient.comorbilities = values
-            .map((value) => comorbilityCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: comorbilityCodes[value],
+              label: comorbilityCodes[value],
+            }));
           break;
         }
 
         case "riskFactor": {
           const values = dataKeyValue.split(" ; ");
           patient.riskFactor = values
-            .map((value) => riskFactorCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: riskFactorCodes[value],
+              label: riskFactorCodes[value],
+            }));
           break;
         }
 
         case "anticoagulationType": {
           const values = dataKeyValue.split(" ; ");
           patient.anticoagulationType = values
-            .map((value) => anticoaguationTypeCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: anticoaguationTypeCodes[value],
+              label: anticoaguationTypeCodes[value],
+            }));
           break;
         }
 
         case "antiplateletType": {
           const values = dataKeyValue.split(" ; ");
           patient.antiplateletType = values
-            .map((value) => antiplateletTherapyCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: antiplateletTherapyCodes[value],
+              label: antiplateletTherapyCodes[value],
+            }));
           break;
         }
 
         case "diagnostic": {
           const value = diagnosticCodes[dataKeyValue] ?? null;
-          patient.diagnostic = value;
+          patient.diagnostic = { id: value, label: value };
           break;
         }
 
         case "followingImaging": {
           const values = dataKeyValue.split(" ; ");
           patient.followingImaging = values
-            .map((value) => imagingTypeCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: imagingTypeCodes[value],
+              label: imagingTypeCodes[value],
+            }));
           break;
         }
 
         case "firstImagingType": {
           const values = dataKeyValue.split(" ; ");
           patient.firstImagingType = values
-            .map((value) => imagingTypeCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: imagingTypeCodes[value],
+              label: imagingTypeCodes[value],
+            }));
           break;
         }
 
         case "affectedVessels": {
           const values = dataKeyValue.split(" ; ");
           patient.affectedVessels = values
-            .map((value) => vesselCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: vesselCodes[value],
+              label: vesselCodes[value],
+            }));
           break;
         }
         case "arteriographyAffectedVessel": {
           const values = dataKeyValue.split(" ; ");
           patient.arteriographyAffectedVessel = values
-            .map((value) => vesselCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: vesselCodes[value],
+              label: vesselCodes[value],
+            }));
           break;
         }
 
         case "administeredReperfusionTreatment": {
           const values = dataKeyValue.split(" ; ");
           patient.administeredReperfusionTreatment = values
-            .map((value) => reperfusionTreatmentCodes[value])
-            .filter((value) => undefined !== value);
+            .filter((value) => "" !== value)
+            .map((value) => ({
+              id: reperfusionTreatmentCodes[value],
+              label: reperfusionTreatmentCodes[value],
+            }));
           break;
         }
 
         case "thrombolyticTreatmentType": {
           const value = thrombolyticTreatmentCodes[dataKeyValue] ?? null;
-          patient.thrombolyticTreatmentType = value;
+          patient.thrombolyticTreatmentType = { id: value, label: value };
           break;
         }
 
         case "stent": {
           const value = stentCodes[dataKeyValue] ?? null;
-          patient.stent = value;
+          patient.stent = { id: value, label: value };
           break;
         }
 
