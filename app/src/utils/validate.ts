@@ -13,3 +13,10 @@ export const conditionalRequiredDate = (t: TFunction, condition: boolean) => (
 ) => {
   return value !== null || condition || (t("requiredField") as string);
 };
+
+export const requiredMultiSelect = (t: TFunction) => (
+  value: { id: string; label: string }[] | null
+) => {
+  const valueIsDefined = value ? value.length > 0 : false;
+  return valueIsDefined || (t("requiredField") as string);
+};
