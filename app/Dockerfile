@@ -6,3 +6,4 @@ COPY ./.yarnrc .
 COPY ./yarn.lock .
 RUN yarn
 COPY . .
+ENTRYPOINT ["yarn", "build"]
