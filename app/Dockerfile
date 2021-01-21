@@ -6,4 +6,6 @@ COPY ./.yarnrc .
 COPY ./yarn.lock .
 RUN yarn
 COPY . .
+RUN chmod +x docker-entrypoint.sh
+
 ENTRYPOINT ["docker-entrypoint.sh"]
