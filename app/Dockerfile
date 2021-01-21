@@ -6,4 +6,4 @@ COPY ./.yarnrc .
 COPY ./yarn.lock .
 RUN yarn
 COPY . .
-ENTRYPOINT ["yarn", "build"]
+ENTRYPOINT ["docker-entrypoint.sh"]
