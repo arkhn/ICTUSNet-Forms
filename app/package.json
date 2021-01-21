@@ -2,6 +2,7 @@
   "name": "avc-forms",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/invictus",
   "dependencies": {
     "@arkhn/ui": "^1.9.8",
     "@date-io/date-fns": "1.x",
