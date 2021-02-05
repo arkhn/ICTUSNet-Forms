@@ -21,6 +21,7 @@ const LanguageSelect: React.FC<LanguageSelectProps> = () => {
       <MenuItem value={"en-EN"}>EN</MenuItem>
       <MenuItem value={"fr-FR"}>FR</MenuItem>
       <MenuItem value={"es-ES"}>ES</MenuItem>
+      <MenuItem value={"pt-PT"}>PT</MenuItem>
       <MenuItem value={"ca-CA"}>CA</MenuItem>
     </Select>
   );

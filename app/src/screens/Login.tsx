@@ -21,14 +21,14 @@ const Login: React.FC<{}> = () => {
     {
       type: "text",
       name: "username",
-      label: "Login",
+      label: t("username"),
       validationRules: { required: t("requiredField") as string },
     },
     {
       type: "text",
       name: "password",
       password: true,
-      label: "Password",
+      label: t("password"),
       validationRules: { required: t("requiredField") as string },
     },
   ];
@@ -51,7 +51,7 @@ const Login: React.FC<{}> = () => {
         submit={onSubmit}
       />
       <Button type="submit" form="login-form" fullWidth>
-        {user?.loading ? <CircularProgress /> : "Login"}
+        {user?.loading ? <CircularProgress /> : t("login")}
       </Button>
     </Container>
   );
