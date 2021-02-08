@@ -145,5 +145,8 @@
   "deletePatientsTitle": "Supprimer patients",
   "deletePatientsQuestion": "Êtes-vous sûr(e) de vouloir supprimer la selection ?",
   "editSuccess": "Patient modifié avec succès",
-  "editFailure": "Echec d'édition du patient"
+  "editFailure": "Echec d'édition du patient",
+  "username": "Nom d'utilisateur",
+  "password": "Mot de passe",
+  "login": "Se connecter"
 }

@@ -145,5 +145,8 @@
   "deletePatientsTitle": "Eliminar pacientes",
   "deletePatientsQuestion": "¿Está seguro de eliminar las filas de pacientes?",
   "editSuccess": "Paciente editado con éxito",
-  "editFailure": "Error en la edición del paciente"
+  "editFailure": "Error en la edición del paciente",
+  "username": "Nombre de usuario",
+  "password": "Palabra clave",
+  "login": "Acceso"
 }
