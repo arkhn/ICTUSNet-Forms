@@ -145,5 +145,8 @@
   "deletePatientsTitle": "Delete patients",
   "deletePatientsQuestion": "Are you sure to delete patient row(s) ?",
   "editSuccess": "Patient successfully edited",
-  "editFailure": "Patient edition failed"
+  "editFailure": "Patient edition failed",
+  "username": "Username",
+  "password": "Password",
+  "login": "Login"
 }

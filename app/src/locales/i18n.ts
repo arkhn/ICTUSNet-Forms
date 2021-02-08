@@ -7,6 +7,7 @@ import translationEN from "./en/translation.json";
 import translationFR from "./fr/translation.json";
 import translationES from "./es/translation.json";
 import translationCA from "./ca/translation.json";
+import translationPT from "./pt/translation.json";
 
 // the translations
 // (tip move them in a JSON file and import them)
@@ -22,6 +23,9 @@ const resources = {
   },
   "ca-CA": {
     translation: translationCA,
+  },
+  "pt-PT": {
+    translation: translationPT,
   },
 };
 
