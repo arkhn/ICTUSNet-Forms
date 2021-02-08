@@ -124,9 +124,13 @@ const evtModalityCodes: Codes<EVTModalityType> = {
 const formatDateForExport = (date: Date): string => {
   return `${date.getFullYear()}${("0" + (date.getMonth() + 1)).slice(-2)}${(
     "0" + date.getDate()
-  ).slice(-2)}T${("0" + date.getHours()).slice(-2)}${(
-    "0" + date.getMinutes()
-  ).slice(-2)}`;
+  ).slice(-2)}T${date
+    .toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+    .replace(":", "")}
+  `;
 };
 
 /**
@@ -138,20 +142,7 @@ const parseImportData = (dateStr: string): Date | null => {
     dateStr.replace(/^(\d{4})(\d\d)(\d\d)[T](\d\d)(\d\d)$/, "$4:$5 $2/$3/$1")
   );
 
-  if (Object.prototype.toString.call(date) === "[object Date]") {
-    // it is a date
-    if (isNaN(date.getTime())) {
-      // d.valueOf() could also work
-      // date is not valid
-      return null;
-    } else {
-      // date is valid
-      return date;
-    }
-  } else {
-    // not a date
-    return null;
-  }
+  return isNaN(date.getTime()) ? null : date;
 };
 
 export const formatPatientDataForExport = (
