@@ -1,7 +1,8 @@
 # ICTUSnet
 
 ## Requirements
-* Docker
+* Docker:  https://docs.docker.com/engine/install/
+* Docker Compose: https://docs.docker.com/compose/install/
 ## Usage
 * Run `docker-compose up -d`. It may take several minutes to launch.
 * Visit `host:port` (default `localhost:8080`).
