@@ -10,4 +10,5 @@
 * If you want to override the default configuration, 
   set the environment variables displayed in the file `config.env`
 * The default port (`8080`) can be changed in the `nginx` configuration in `docker-compose.yml`
-
+## Administration interface
+To manage user groups and users, visit `host/api/admin/` (default `localhost:8080/api/admin`)
