@@ -161,6 +161,15 @@ export const formatPatientDataForExport = (
       formattedPatient[dataKey] = patient[dataKey] ? "1" : "0";
     } else {
       switch (dataKey) {
+        case "INR":
+        case "initialNIHSS":
+        case "firstImagingASPECTSScore":
+        case "followingImagingASPECTSScore":
+        case "NIHSSPrearteriography":
+        case "previousMRS": {
+          formattedPatient[dataKey] = patient[dataKey] ?? "99";
+          break;
+        }
         case "regionId": {
           const value = patient.regionId;
           formattedPatient[dataKey] = value?.id ?? "";
@@ -325,7 +334,7 @@ export const formatPatientDataForExport = (
         case "initialmTiciScore":
         case "finalmTICIScore": {
           const value = patient[dataKey];
-          formattedPatient[dataKey] = value?.id ?? "";
+          formattedPatient[dataKey] = value?.id ?? "99";
           break;
         }
 
