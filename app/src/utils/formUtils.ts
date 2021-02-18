@@ -13,6 +13,7 @@ import {
   StentType,
   IdRegionEnum,
   EVTModalityType,
+  mTICIScore,
 } from "./enums";
 import { v4 as uuid } from "uuid";
 
@@ -161,6 +162,15 @@ export const formatPatientDataForExport = (
       formattedPatient[dataKey] = patient[dataKey] ? "1" : "0";
     } else {
       switch (dataKey) {
+        case "INR":
+        case "initialNIHSS":
+        case "firstImagingASPECTSScore":
+        case "followingImagingASPECTSScore":
+        case "NIHSSPrearteriography":
+        case "previousMRS": {
+          formattedPatient[dataKey] = patient[dataKey] ?? "99";
+          break;
+        }
         case "regionId": {
           const value = patient.regionId;
           formattedPatient[dataKey] = value?.id ?? "";
@@ -325,7 +335,8 @@ export const formatPatientDataForExport = (
         case "initialmTiciScore":
         case "finalmTICIScore": {
           const value = patient[dataKey];
-          formattedPatient[dataKey] = value?.id ?? "";
+          formattedPatient[dataKey] =
+            value && value.id !== mTICIScore.NA ? value.id : "99";
           break;
         }
 
@@ -558,6 +569,9 @@ export const formatPatientDataForImport = (patientData: {
           break;
         }
       }
+    } else if (["initialmTiciScore", "finalmTICIScore"].includes(dataKey)) {
+      //@ts-ignore
+      patient[dataKey] = { id: mTICIScore.NA, label: mTICIScore.NA };
     }
   }
 
