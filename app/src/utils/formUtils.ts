@@ -17,6 +17,8 @@ import {
 } from "./enums";
 import { v4 as uuid } from "uuid";
 
+const itemSeparator = "#";
+
 type Codes<T extends string = string> = { [code: string]: T };
 
 const patientSexCodes: Codes<PatientSex> = {
@@ -193,7 +195,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -206,7 +208,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -219,7 +221,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -232,7 +234,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -253,7 +255,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -266,7 +268,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -279,7 +281,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
         case "arteriographyAffectedVessel": {
@@ -291,7 +293,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -304,7 +306,7 @@ export const formatPatientDataForExport = (
                 (value) =>
                   entries.find((entry) => entry[1] === value?.id)?.[0] ?? ""
               )
-              .join("#") ?? "";
+              .join(itemSeparator) ?? "";
           break;
         }
 
@@ -377,11 +379,12 @@ export const formatPatientDataForExport = (
 };
 
 export const formatPatientDataForImport = (patientData: {
-  [dataKey: string]: string;
+  [dataKey: string]: string | null;
 }): PatientData => {
   const patient = createPatientData(uuid());
   for (const dataKey in patientData) {
     const dataKeyValue = patientData[dataKey];
+    if (!dataKeyValue) continue;
     if (dataKeyValue.toString() !== "99" || dataKey === "age") {
       switch (dataKey as keyof PatientData) {
         case "areaResident":
@@ -414,46 +417,38 @@ export const formatPatientDataForImport = (patientData: {
         }
 
         case "comorbilities": {
-          const values = dataKeyValue.split("#");
-          patient.comorbilities = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: comorbilityCodes[value],
-              label: comorbilityCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.comorbilities = values.map((value) => ({
+            id: comorbilityCodes[value],
+            label: comorbilityCodes[value],
+          }));
           break;
         }
 
         case "riskFactor": {
-          const values = dataKeyValue.split("#");
-          patient.riskFactor = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: riskFactorCodes[value],
-              label: riskFactorCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.riskFactor = values.map((value) => ({
+            id: riskFactorCodes[value],
+            label: riskFactorCodes[value],
+          }));
           break;
         }
 
         case "anticoagulationType": {
-          const values = dataKeyValue.split("#");
-          patient.anticoagulationType = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: anticoaguationTypeCodes[value],
-              label: anticoaguationTypeCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.anticoagulationType = values.map((value) => ({
+            id: anticoaguationTypeCodes[value],
+            label: anticoaguationTypeCodes[value],
+          }));
           break;
         }
 
         case "antiplateletType": {
-          const values = dataKeyValue.split("#");
-          patient.antiplateletType = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: antiplateletTherapyCodes[value],
-              label: antiplateletTherapyCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.antiplateletType = values.map((value) => ({
+            id: antiplateletTherapyCodes[value],
+            label: antiplateletTherapyCodes[value],
+          }));
           break;
         }
 
@@ -464,56 +459,46 @@ export const formatPatientDataForImport = (patientData: {
         }
 
         case "followingImaging": {
-          const values = dataKeyValue.split("#");
-          patient.followingImaging = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: imagingTypeCodes[value],
-              label: imagingTypeCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.followingImaging = values.map((value) => ({
+            id: imagingTypeCodes[value],
+            label: imagingTypeCodes[value],
+          }));
           break;
         }
 
         case "firstImagingType": {
-          const values = dataKeyValue.split("#");
-          patient.firstImagingType = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: imagingTypeCodes[value],
-              label: imagingTypeCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.firstImagingType = values.map((value) => ({
+            id: imagingTypeCodes[value],
+            label: imagingTypeCodes[value],
+          }));
           break;
         }
 
         case "affectedVessels": {
-          const values = dataKeyValue.split("#");
-          patient.affectedVessels = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: vesselCodes[value],
-              label: vesselCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.affectedVessels = values.map((value) => ({
+            id: vesselCodes[value],
+            label: vesselCodes[value],
+          }));
           break;
         }
         case "arteriographyAffectedVessel": {
-          const values = dataKeyValue.split("#");
-          patient.arteriographyAffectedVessel = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: vesselCodes[value],
-              label: vesselCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.arteriographyAffectedVessel = values.map((value) => ({
+            id: vesselCodes[value],
+            label: vesselCodes[value],
+          }));
           break;
         }
 
         case "administeredReperfusionTreatment": {
-          const values = dataKeyValue.split("#");
-          patient.administeredReperfusionTreatment = values
-            .filter((value) => "" !== value)
-            .map((value) => ({
-              id: reperfusionTreatmentCodes[value],
-              label: reperfusionTreatmentCodes[value],
-            }));
+          const values = dataKeyValue.split(itemSeparator);
+          patient.administeredReperfusionTreatment = values.map((value) => ({
+            id: reperfusionTreatmentCodes[value],
+            label: reperfusionTreatmentCodes[value],
+          }));
           break;
         }
 
