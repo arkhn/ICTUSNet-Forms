@@ -4,8 +4,8 @@ import { GetApp } from "@material-ui/icons";
 import { useTranslation } from "react-i18next";
 import { CSVReader } from "react-papaparse";
 import { useAppDispatch } from "state/store";
-import { setPatientEntriesThunk } from "state/patientFormSlice";
-import { formatPatientDataForImport } from "utils/formUtils";
+import { PatientData, setPatientEntriesThunk } from "state/patientFormSlice";
+import { formatPatientDataForImport, parseIctusFormat } from "utils/formUtils";
 
 type CSVUploadButtonProps = {
   fabClassName?: string;
@@ -16,22 +16,20 @@ const CSVUploadButton: React.FC<CSVUploadButtonProps> = ({ fabClassName }) => {
   const dispatch = useAppDispatch();
   const buttonRef = useRef<null | CSVReader>(null);
 
-  const handleOnDrop = (data: any[]) => {
-    const [columnData, ...dataValues] = data;
+  const handleOnDrop = (rows: any[]) => {
+    const rowsData = rows.map((item) => item.data as string[]);
 
-    if (!columnData) {
-      return;
-    }
-
-    const columnDataKeys = columnData.data as string[];
-    const values = dataValues.map((item) => item.data as string[]);
-    const patientData = values.map((item) => {
-      const patient: { [dataKey: string]: string } = {};
-      columnDataKeys.forEach((dataKey, index) => {
-        patient[dataKey] = item[index];
-      });
-      return patient;
-    });
+    const patientData = rowsData.reduce(
+      (acc: Record<keyof PatientData, string>[], row, index) => {
+        try {
+          return [...acc, parseIctusFormat(row)];
+        } catch (error) {
+          console.error(`${error} in line ${index + 1} of uploaded csv`);
+          return acc;
+        }
+      },
+      []
+    );
     const patients = patientData.map(formatPatientDataForImport);
     dispatch(setPatientEntriesThunk(patients));
   };
