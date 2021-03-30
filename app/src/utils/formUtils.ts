@@ -49,6 +49,20 @@ export const parseIctusFormat = (
   return parsedData;
 };
 
+export const convertToIctusFormat = (
+  patientData: Partial<Record<keyof PatientData, string | number | boolean>>
+): string => {
+  return ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.reduce((dataString, key, index) => {
+    if (["firstName", "lastName"].includes(key)) {
+      return dataString;
+    } else if (key === "IPP") {
+      return `${patientData[key]}`;
+    } else {
+      return `${dataString}|${patientData[key]}`;
+    }
+  }, "");
+};
+
 const patientSexCodes: Codes<PatientSex> = {
   "248153007": PatientSex.male,
   "248152002": PatientSex.female,
