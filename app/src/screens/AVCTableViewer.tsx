@@ -9,12 +9,14 @@ import { jsonToCSV } from "react-papaparse";
 import { useAppSelector, useAppDispatch } from "state/store";
 import {
   createPatientData,
-  PatientData,
   getPatientsThunk,
   deletePatientEntryThunk,
 } from "state/patientFormSlice";
 
-import { formatPatientDataForExport } from "utils/formUtils";
+import {
+  convertToIctusFormat,
+  formatPatientDataForExport,
+} from "utils/formUtils";
 import { Container, Fab, makeStyles, Paper } from "@material-ui/core";
 import TableViewer from "components/TableViewer";
 import CSVUploadButton from "components/CSVUploadButton";
@@ -90,32 +92,31 @@ const AVCTableViewer: React.FC<{}> = () => {
   };
 
   const exportToCsv = (optionIndex: number) => {
-    const columns = Object.keys(data[0]).filter((key) => key !== "id");
     const selectedPatients = data.filter((item) =>
       selectedRowIds.some((id) => id === item.id)
     );
-    let dataToExport: Partial<
-      Record<keyof PatientData, string | number | boolean>
-    >[] = [];
+    let dataToExport: string[][] = [];
     switch (optionIndex) {
       case 0:
-        dataToExport = selectedPatients.map(formatPatientDataForExport());
+        dataToExport = selectedPatients
+          .map(formatPatientDataForExport())
+          .map((data) => [convertToIctusFormat(data)]);
         break;
       case 1:
-        dataToExport = selectedPatients.map(
-          formatPatientDataForExport("pseudonymized")
-        );
+        dataToExport = selectedPatients
+          .map(formatPatientDataForExport("pseudonymized"))
+          .map((data) => [convertToIctusFormat(data)]);
         break;
       case 2:
-        dataToExport = selectedPatients.map(
-          formatPatientDataForExport("enhanced pseudonymized")
-        );
+        dataToExport = selectedPatients
+          .map(formatPatientDataForExport("enhanced pseudonymized"))
+          .map((data) => [convertToIctusFormat(data)]);
         break;
 
       default:
         break;
     }
-    const csv = jsonToCSV(dataToExport, { columns });
+    const csv = jsonToCSV(dataToExport);
     fileDownload(csv, "patientForms.csv");
   };
 

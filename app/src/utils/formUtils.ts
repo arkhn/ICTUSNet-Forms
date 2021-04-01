@@ -1,4 +1,5 @@
-import { PatientData, createPatientData } from "../state/patientFormSlice";
+import { v4 as uuid } from "uuid";
+
 import {
   PatientSex,
   Comorbilities,
@@ -15,11 +16,52 @@ import {
   EVTModalityType,
   mTICIScore,
 } from "./enums";
-import { v4 as uuid } from "uuid";
+import { ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP } from "../constants";
+import { PatientData, createPatientData } from "../state/patientFormSlice";
 
 const itemSeparator = "#";
 
 type Codes<T extends string = string> = { [code: string]: T };
+
+export const parseIctusFormat = (
+  values: string[]
+): Record<keyof PatientData, string> => {
+  if (values.length !== ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.length - 2) {
+    throw new Error(
+      "CSV data parsing failed because of incorrect amount of separators"
+    );
+  }
+
+  const parsedData = values.reduce(
+    (data, value, index) => {
+      const key = ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP[index + 2];
+      return {
+        ...data,
+        [key]: value ?? "",
+      };
+    },
+    {
+      firstName: "",
+      lastName: "",
+    }
+  ) as Record<keyof PatientData, string>;
+
+  return parsedData;
+};
+
+export const convertToIctusFormat = (
+  patientData: Partial<Record<keyof PatientData, string | number | boolean>>
+): string => {
+  return ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.reduce((dataString, key, index) => {
+    if (["firstName", "lastName"].includes(key)) {
+      return dataString;
+    } else if (key === "IPP") {
+      return `${patientData[key]}`;
+    } else {
+      return `${dataString}|${patientData[key]}`;
+    }
+  }, "");
+};
 
 const patientSexCodes: Codes<PatientSex> = {
   "248153007": PatientSex.male,

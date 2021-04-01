@@ -10,7 +10,6 @@ import { makeStyles, TableCell, Checkbox, Fab } from "@material-ui/core";
 import { Delete, Create } from "@material-ui/icons";
 import { PatientData, PatientColumnData } from "state/patientFormSlice";
 import { useTranslation } from "react-i18next";
-import { isArray } from "util";
 import GridCell from "./GridCell";
 
 const headerHeight = 68;
@@ -220,13 +219,13 @@ const TableViewer: React.FC<TableViewerProps> = ({
             cellContent = `${value.getDate()}/${
               value.getMonth() + 1
             }/${value.getFullYear()} ${value.toLocaleTimeString()}`;
-          } else if (isArray(value)) {
+          } else if (Array.isArray(value)) {
             cellContent = value
               //@ts-ignore
               .map((val: any) =>
                 val.id ? (t(val.id) as string) : (t(val) as string)
               )
-              .join(" ; ");
+              .join(" | ");
           } else if (value.id) {
             cellContent = t(value.id).toString();
           }
