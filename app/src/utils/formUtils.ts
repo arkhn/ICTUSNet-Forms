@@ -390,7 +390,7 @@ export const formatPatientDataForExport = (
   }
 
   if (type === "enhanced pseudonymized") {
-    formattedPatient.IPP = patient.id;
+    formattedPatient.idEvent = patient.id;
   }
 
   return formattedPatient;

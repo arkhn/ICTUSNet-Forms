@@ -27,7 +27,7 @@ import { enqueueSnackbar } from "./notifSlice";
 type SelectOption<T extends string = string> = { id: T; label: string };
 
 export type PatientData = {
-  IPP: string | null;
+  idEvent: string | null;
   regionId: SelectOption<IdRegionEnum> | null;
   areaResident: boolean | null;
   sex: SelectOption<PatientSex> | null;
@@ -97,8 +97,8 @@ const initialState: PatientFormState = {
   patients: [],
   patientColumnData: [
     {
-      dataKey: "IPP",
-      label: "IPP",
+      dataKey: "idEvent",
+      label: "idEvent",
     },
     {
       dataKey: "regionId",
@@ -233,7 +233,7 @@ const initialState: PatientFormState = {
 
 export const createPatientData = (patientId: string): PatientData => ({
   id: patientId,
-  IPP: null,
+  idEvent: null,
   areaResident: null,
   regionId: null,
   sex: null,
