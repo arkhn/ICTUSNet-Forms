@@ -146,5 +146,6 @@
   "editFailure": "Falha na edição do paciente",
   "username": "Nome de acesso",
   "password": "Palavra de código",
-  "login": "Login"
+  "login": "Login",
+  "patientsPerPage": "Pacientes por página"
 }

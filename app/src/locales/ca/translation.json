@@ -146,5 +146,6 @@
   "editFailure": "Patient edition failed",
   "username": "Username",
   "password": "Password",
-  "login": "Login"
+  "login": "Login",
+  "patientsPerPage": "Pacients per pàgina"
 }
