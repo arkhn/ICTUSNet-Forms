@@ -14,8 +14,6 @@ export const REFRESH_TOKEN = "refresh";
 export const USERNAME_KEY = "username";
 
 export const ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP: (keyof PatientData)[] = [
-  "firstName",
-  "lastName",
   "IPP",
   "regionId",
   "areaResident",

@@ -1,9 +1,7 @@
 {
-  "firstName": "Nombre",
   "importCsv": "Importar CSV",
   "addPatient": "Agregar paciente",
   "exportSelection": "Exportar selección",
-  "lastName": "Apellido",
   "birthDate": "Fecha de nacimiento",
   "age": "Edad",
   "address": "Dirección",

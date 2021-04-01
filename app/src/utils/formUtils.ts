@@ -27,25 +27,19 @@ type Codes<T extends string = string> = { [code: string]: T };
 export const parseIctusFormat = (
   values: string[]
 ): Record<keyof PatientData, string> => {
-  if (values.length !== ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.length - 2) {
+  if (values.length !== ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.length) {
     throw new Error(
       "CSV data parsing failed because of incorrect amount of separators"
     );
   }
 
-  const parsedData = values.reduce(
-    (data, value, index) => {
-      const key = ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP[index + 2];
-      return {
-        ...data,
-        [key]: value ?? "",
-      };
-    },
-    {
-      firstName: "",
-      lastName: "",
-    }
-  ) as Record<keyof PatientData, string>;
+  const parsedData = values.reduce((data, value, index) => {
+    const key = ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP[index];
+    return {
+      ...data,
+      [key]: value ?? "",
+    };
+  }, {}) as Record<keyof PatientData, string>;
 
   return parsedData;
 };
@@ -53,15 +47,9 @@ export const parseIctusFormat = (
 export const convertToIctusFormat = (
   patientData: Partial<Record<keyof PatientData, string | number | boolean>>
 ): string => {
-  return ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.reduce((dataString, key, index) => {
-    if (["firstName", "lastName"].includes(key)) {
-      return dataString;
-    } else if (key === "IPP") {
-      return `${patientData[key]}`;
-    } else {
-      return `${dataString}|${patientData[key]}`;
-    }
-  }, "");
+  return ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.map((key) => patientData[key]).join(
+    "|"
+  );
 };
 
 const patientSexCodes: Codes<PatientSex> = {
@@ -401,12 +389,8 @@ export const formatPatientDataForExport = (
     }
   }
 
-  if (type !== "nominative") {
-    const id = patient.id;
-    formattedPatient.firstName = formattedPatient.lastName = id;
-    if (type === "enhanced pseudonymized") {
-      formattedPatient.IPP = id;
-    }
+  if (type === "enhanced pseudonymized") {
+    formattedPatient.IPP = patient.id;
   }
 
   return formattedPatient;

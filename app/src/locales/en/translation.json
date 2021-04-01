@@ -1,9 +1,7 @@
 {
-  "firstName": "First Name",
   "importCsv": "Import Csv",
   "addPatient": "Add Patient",
   "exportSelection": "Export Selection",
-  "lastName": "Last Name",
   "birthDate": "Birth Date",
   "age": "Age",
   "address": "Address",
