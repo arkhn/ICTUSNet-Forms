@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import moment from "moment";
 
 import {
   PatientSex,
@@ -167,14 +168,7 @@ const evtModalityCodes: Codes<EVTModalityType> = {
 };
 
 const formatDateForExport = (date: Date): string => {
-  return `${date.getFullYear()}${("0" + (date.getMonth() + 1)).slice(-2)}${(
-    "0" + date.getDate()
-  ).slice(-2)}T${date
-    .toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-    .replace(":", "")}`;
+  return moment(date).format("YYYYMMDD[T]HHmm");
 };
 
 /**
@@ -182,9 +176,7 @@ const formatDateForExport = (date: Date): string => {
  * @param dateStr Date string to format YYYYMMDDTHHMM
  */
 const parseImportData = (dateStr: string): Date | null => {
-  const date = new Date(
-    dateStr.replace(/^(\d{4})(\d\d)(\d\d)[T](\d\d)(\d\d)$/, "$4:$5 $2/$3/$1")
-  );
+  const date = moment(dateStr).toDate();
 
   return isNaN(date.getTime()) ? null : date;
 };
