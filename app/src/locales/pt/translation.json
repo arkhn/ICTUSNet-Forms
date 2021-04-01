@@ -23,7 +23,7 @@
   "areaResident": "Residindo na área",
   "regionId": "ID da região",
   "sex": "Sexo",
-  "symptomsOnsetDate": "Data/Hora do início dos sintomas",
+  "symptomsOnsetDate": "Data de início dos sintomas (ou última vez visto assintomático)",
   "previousMRS": "MRS anterior",
   "comorbilities": "Comorabilidades",
   "riskFactor": "Factores de risco",
