@@ -148,5 +148,7 @@
   "editFailure": "Patient edition failed",
   "username": "Username",
   "password": "Password",
-  "login": "Login"
+  "login": "Login",
+  "importErrorsHaveOccured": "S'han produït errors d'importació",
+  "close": "Tancas"
 }

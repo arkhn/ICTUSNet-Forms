@@ -148,5 +148,7 @@
   "editFailure": "Patient edition failed",
   "username": "Username",
   "password": "Password",
-  "login": "Login"
+  "login": "Login",
+  "importErrorsHaveOccured": "Import errors have occured",
+  "close": "Close"
 }

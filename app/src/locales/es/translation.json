@@ -148,5 +148,7 @@
   "editFailure": "Error en la edición del paciente",
   "username": "Nombre de usuario",
   "password": "Palabra clave",
-  "login": "Acceso"
+  "login": "Acceso",
+  "importErrorsHaveOccured": "Se han producido errores de importación",
+  "close": "Cerrar"
 }
