@@ -68,8 +68,9 @@ const AVCTableViewer: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGES[0]);
-  const { data, columns } = useAppSelector((state) => ({
+  const { data, columns, total } = useAppSelector((state) => ({
     data: state.patientForm.patients,
+    total: state.patientForm.totalPatients,
     columns: state.patientForm.patientColumnData,
   }));
 
@@ -144,8 +145,8 @@ const AVCTableViewer: React.FC<{}> = () => {
   };
 
   useEffect(() => {
-    dispatch(getPatientsThunk());
-  }, [dispatch]);
+    dispatch(getPatientsThunk({ limit: rowsPerPage, page }));
+  }, [dispatch, rowsPerPage, page]);
 
   return (
     <Container maxWidth="xl">
@@ -181,10 +182,7 @@ const AVCTableViewer: React.FC<{}> = () => {
       <Paper>
         <div style={{ height: 700 }}>
           <TableViewer
-            data={data.slice(
-              page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
-            )}
+            data={data}
             columns={columns}
             onClickDelete={openDialog}
             onClickEdit={onEditPatient}
@@ -195,7 +193,7 @@ const AVCTableViewer: React.FC<{}> = () => {
         <TablePagination
           rowsPerPageOptions={ROWS_PER_PAGES}
           component="div"
-          count={data.length}
+          count={total ?? 0}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

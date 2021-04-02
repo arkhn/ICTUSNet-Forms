@@ -87,6 +87,7 @@ export type PatientColumnData = {
 
 export type PatientFormState = {
   patients: PatientData[];
+  totalPatients?: number;
   patientColumnData: PatientColumnData;
   loading: boolean;
   requestId?: string;
@@ -284,11 +285,11 @@ export const createPatientData = (patientId: string): PatientData => ({
 });
 
 const getPatientsThunk = createAsyncThunk<
-  PatientData[],
-  void,
+  { patients: PatientData[]; totalPatients: number },
+  { limit: number; page: number } | undefined,
   { state: RootState }
->("patientForm/getPatients", async () => {
-  return await getPatients();
+>("patientForm/getPatients", async (params) => {
+  return await getPatients(params);
 });
 
 const deletePatientEntryThunk = createAsyncThunk<
@@ -398,7 +399,8 @@ const patientFormSlice = createSlice({
       state.requestId = meta.requestId;
     });
     builder.addCase(getPatientsThunk.fulfilled, (state, { payload, meta }) => {
-      state.patients = payload;
+      state.patients = payload.patients;
+      state.totalPatients = payload.totalPatients;
       state.loading = state.requestId !== meta.requestId;
     });
   },
