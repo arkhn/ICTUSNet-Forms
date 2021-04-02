@@ -18,9 +18,13 @@ class PatientViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows patients to be viewed or edited.
     """
-    queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     permission_classes = [permissions.DjangoModelPermissions]
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Patient.objects.all()
+        return Patient.objects.filter(created_by=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(
