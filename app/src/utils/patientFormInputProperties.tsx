@@ -30,9 +30,7 @@ const patientFormInputProperties = (t: TFunction) => (
   data: PatientData
 ): FormInputProperty<PatientData>[] => {
   return [
-    { type: "text", name: "firstName", label: t("firstName") },
-    { type: "text", name: "lastName", label: t("lastName") },
-    { type: "text", name: "IPP", label: t("IPP") },
+    { type: "text", name: "idEvent", label: t("idEvent") },
     {
       type: "select",
       name: "regionId",

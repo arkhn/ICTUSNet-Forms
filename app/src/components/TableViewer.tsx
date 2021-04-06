@@ -12,11 +12,12 @@ import { PatientData, PatientColumnData } from "state/patientFormSlice";
 import { useTranslation } from "react-i18next";
 import GridCell from "./GridCell";
 
-const headerHeight = 68;
-const rowHeight = 54;
-const checkboxColumnWidth = 54;
-const columnWidth = 200;
-const fabColumnWidth = 100;
+const HEADER_HEIGHT = 68;
+const ROW_HEIGHT = 54;
+const CHECKBOX_COLUMN_WIDTH = 54;
+const COLUMN_WIDTH = 200;
+const FAB_GRID_WIDTH = 100;
+const LEFT_GRID_WIDTH = 2 * CHECKBOX_COLUMN_WIDTH;
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -114,29 +115,43 @@ const TableViewer: React.FC<TableViewerProps> = ({
     }
   };
 
-  const renderLeftHeaderCell: GridCellRenderer = ({ style, key }) => {
+  const renderLeftHeaderCell: GridCellRenderer = ({
+    style,
+    key,
+    columnIndex,
+  }) => {
     return (
       <TableCell
         key={key}
         padding="checkbox"
         className={clsx(classes.tableCell, classes.centeredFlexContainer)}
         component="div"
+        align="left"
         style={style}
       >
-        <Checkbox
-          checked={data.length > 0 && selectedRowIds?.length === data.length}
-          indeterminate={
-            selectedRowIds &&
-            selectedRowIds.length > 0 &&
-            selectedRowIds.length < data.length
-          }
-          onChange={onCickCheckBox(true)}
-        />
+        {columnIndex === 0 ? (
+          <Checkbox
+            checked={data.length > 0 && selectedRowIds?.length === data.length}
+            indeterminate={
+              selectedRowIds &&
+              selectedRowIds.length > 0 &&
+              selectedRowIds.length < data.length
+            }
+            onChange={onCickCheckBox(true)}
+          />
+        ) : (
+          <span>#</span>
+        )}
       </TableCell>
     );
   };
 
-  const renderLeftSideCell: GridCellRenderer = ({ style, rowIndex, key }) => {
+  const renderLeftSideCell: GridCellRenderer = ({
+    style,
+    rowIndex,
+    key,
+    columnIndex,
+  }) => {
     const rowId = data[rowIndex].id;
     const isRowSelected = selectedRowIds?.some((id) => id === rowId);
     return (
@@ -151,10 +166,14 @@ const TableViewer: React.FC<TableViewerProps> = ({
         style={style}
         onMouseOver={() => setHoveredRowIndex(rowIndex)}
       >
-        <Checkbox
-          checked={selectedRowIds?.some((id) => id === rowId)}
-          onChange={onCickCheckBox(false, rowIndex)}
-        />
+        {columnIndex === 0 ? (
+          <Checkbox
+            checked={selectedRowIds?.some((id) => id === rowId)}
+            onChange={onCickCheckBox(false, rowIndex)}
+          />
+        ) : (
+          <span>{rowIndex + 1}</span>
+        )}
       </TableCell>
     );
   };
@@ -279,26 +298,26 @@ const TableViewer: React.FC<TableViewerProps> = ({
                     <Grid
                       className={clsx(classes.grid)}
                       cellRenderer={renderLeftHeaderCell}
-                      columnCount={1}
+                      columnCount={2}
                       rowCount={1}
-                      columnWidth={checkboxColumnWidth}
-                      width={checkboxColumnWidth}
-                      rowHeight={headerHeight}
-                      height={headerHeight}
+                      columnWidth={CHECKBOX_COLUMN_WIDTH}
+                      width={LEFT_GRID_WIDTH}
+                      rowHeight={HEADER_HEIGHT}
+                      height={HEADER_HEIGHT}
                     />
                   </div>
                   <div
                     className={classes.leftSideGridContainer}
-                    style={{ top: headerHeight }}
+                    style={{ top: HEADER_HEIGHT }}
                   >
                     <Grid
                       className={clsx(classes.grid, classes.noScrollBar)}
                       cellRenderer={renderLeftSideCell}
-                      width={checkboxColumnWidth}
-                      height={height - headerHeight}
-                      columnWidth={checkboxColumnWidth}
-                      rowHeight={rowHeight}
-                      columnCount={1}
+                      width={LEFT_GRID_WIDTH}
+                      height={height - HEADER_HEIGHT}
+                      columnWidth={CHECKBOX_COLUMN_WIDTH}
+                      rowHeight={ROW_HEIGHT}
+                      columnCount={2}
                       rowCount={data.length}
                       scrollTop={scrollTop}
                     />
@@ -307,28 +326,28 @@ const TableViewer: React.FC<TableViewerProps> = ({
                     className={classes.gridColumn}
                     style={{
                       position: "absolute",
-                      left: checkboxColumnWidth,
+                      left: LEFT_GRID_WIDTH,
                     }}
                   >
                     <Grid
                       className={clsx(classes.grid, classes.noScrollBar)}
-                      height={headerHeight}
-                      width={width - checkboxColumnWidth}
-                      columnWidth={columnWidth}
+                      height={HEADER_HEIGHT}
+                      width={width - LEFT_GRID_WIDTH}
+                      columnWidth={COLUMN_WIDTH}
                       columnCount={columns.length}
-                      rowHeight={headerHeight}
+                      rowHeight={HEADER_HEIGHT}
                       rowCount={1}
                       scrollLeft={scrollLeft}
                       cellRenderer={renderHeaderCell}
                     />
                     <Grid
                       className={clsx(classes.grid)}
-                      height={height - headerHeight}
-                      width={width - checkboxColumnWidth}
+                      height={height - HEADER_HEIGHT}
+                      width={width - LEFT_GRID_WIDTH}
                       columnCount={columns.length}
-                      columnWidth={columnWidth}
+                      columnWidth={COLUMN_WIDTH}
                       rowCount={data.length}
-                      rowHeight={rowHeight}
+                      rowHeight={ROW_HEIGHT}
                       onScroll={onScroll}
                       scrollTop={scrollTop}
                       cellRenderer={renderBodyCell}
@@ -343,13 +362,13 @@ const TableViewer: React.FC<TableViewerProps> = ({
                   >
                     <Grid
                       className={clsx(classes.grid, classes.noScrollBar)}
-                      height={height - headerHeight}
-                      width={fabColumnWidth}
+                      height={height - HEADER_HEIGHT}
+                      width={FAB_GRID_WIDTH}
                       cellRenderer={renderRightSideCell}
                       columnCount={1}
                       rowCount={data.length}
-                      columnWidth={fabColumnWidth}
-                      rowHeight={rowHeight}
+                      columnWidth={FAB_GRID_WIDTH}
+                      rowHeight={ROW_HEIGHT}
                       scrollTop={scrollTop}
                     />
                   </div>
