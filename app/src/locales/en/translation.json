@@ -147,5 +147,7 @@
   "username": "Username",
   "password": "Password",
   "login": "Login",
+  "importErrorsHaveOccured": "Import errors have occured",
+  "close": "Close",
   "patientsPerPage": "Patients per page"
 }

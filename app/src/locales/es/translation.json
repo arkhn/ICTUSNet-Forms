@@ -147,5 +147,7 @@
   "username": "Nombre de usuario",
   "password": "Palabra clave",
   "login": "Acceso",
+  "importErrorsHaveOccured": "Se han producido errores de importación",
+  "close": "Cerrar",
   "patientsPerPage": "Pacientes por página"
 }
