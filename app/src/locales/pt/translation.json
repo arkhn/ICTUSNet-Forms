@@ -1,9 +1,7 @@
 {
-  "firstName": "Primeiro nome",
   "importCsv": "Importar Csv",
   "addPatient": "Adicionar um Paciente",
   "exportSelection": "Selecção de exportação",
-  "lastName": "Nome",
   "birthDate": "Data de nascimento",
   "age": "Idade",
   "address": "Endereço",
@@ -23,7 +21,7 @@
   "areaResident": "Residindo na área",
   "regionId": "ID da região",
   "sex": "Sexo",
-  "symptomsOnsetDate": "Data/Hora do início dos sintomas",
+  "symptomsOnsetDate": "Data de início dos sintomas (ou última vez visto assintomático)",
   "previousMRS": "MRS anterior",
   "comorbilities": "Comorabilidades",
   "riskFactor": "Factores de risco",
@@ -150,5 +148,6 @@
   "password": "Palavra de código",
   "login": "Login",
   "importErrorsHaveOccured": "Ocorreram erros de importação",
-  "close": "Fechar"
+  "close": "Fechar",
+  "patientsPerPage": "Pacientes por página"
 }

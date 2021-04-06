@@ -32,11 +32,20 @@ export const logout = () => {
   deleteTokens();
 };
 
-export const getPatients = async () => {
+export const getPatients = async (params?: { page: number; limit: number }) => {
+  let offsetParam = "";
+  let limitParam = "";
+
+  if (params) {
+    const { limit, page } = params;
+    limitParam = `?limit=${limit}`;
+    offsetParam = `&offset=${limit * page}`;
+  }
+
   const patientsResponse = await api.get<{
     count: number;
     results: { data: { [dataKey: string]: string }; code: string }[];
-  }>("patients/");
+  }>(`patients/${limitParam}${offsetParam}`);
   const { count, results } = patientsResponse.data;
 
   if (count > 0) {
@@ -45,9 +54,9 @@ export const getPatients = async () => {
       id: res.code,
     }));
 
-    return patients;
+    return { patients, totalPatients: count };
   } else {
-    return [];
+    return { patients: [], totalPatients: 0 };
   }
 };
 

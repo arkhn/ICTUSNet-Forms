@@ -1,9 +1,7 @@
 {
-  "firstName": "Nom",
   "importCsv": "Importar CSV",
   "addPatient": "Afegir pacient",
   "exportSelection": "Exportar selecció",
-  "lastName": "Cognom",
   "birthDate": "Data de naixement",
   "age": "edat",
   "address": "adreça",
@@ -23,7 +21,7 @@
   "areaResident": "Resident en la zona",
   "regionId": "Id Regió",
   "sex": "Sexe",
-  "symptomsOnsetDate": "Data/hora d’aparició dels símptomes",
+  "symptomsOnsetDate": "Data d'aparició dels símptomes (o l'última vegada que es va veure asintomàtica)",
   "previousMRS": "MRS Previ",
   "comorbilities": "Comorbiditats",
   "riskFactor": "Factors de risc",
@@ -150,5 +148,6 @@
   "password": "Password",
   "login": "Login",
   "importErrorsHaveOccured": "S'han produït errors d'importació",
-  "close": "Tancas"
+  "close": "Tancas",
+  "patientsPerPage": "Pacients per pàgina"
 }

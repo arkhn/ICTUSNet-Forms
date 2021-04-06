@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import moment from "moment";
 
 import {
   PatientSex,
@@ -26,25 +27,19 @@ type Codes<T extends string = string> = { [code: string]: T };
 export const parseIctusFormat = (
   values: string[]
 ): Record<keyof PatientData, string> => {
-  if (values.length !== ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.length - 2) {
+  if (values.length !== ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.length) {
     throw new Error(
       "CSV data parsing failed because of incorrect amount of separators"
     );
   }
 
-  const parsedData = values.reduce(
-    (data, value, index) => {
-      const key = ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP[index + 2];
-      return {
-        ...data,
-        [key]: value ?? "",
-      };
-    },
-    {
-      firstName: "",
-      lastName: "",
-    }
-  ) as Record<keyof PatientData, string>;
+  const parsedData = values.reduce((data, value, index) => {
+    const key = ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP[index];
+    return {
+      ...data,
+      [key]: value ?? "",
+    };
+  }, {}) as Record<keyof PatientData, string>;
 
   return parsedData;
 };
@@ -52,15 +47,9 @@ export const parseIctusFormat = (
 export const convertToIctusFormat = (
   patientData: Partial<Record<keyof PatientData, string | number | boolean>>
 ): string => {
-  return ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.reduce((dataString, key, index) => {
-    if (["firstName", "lastName"].includes(key)) {
-      return dataString;
-    } else if (key === "IPP") {
-      return `${patientData[key]}`;
-    } else {
-      return `${dataString}|${patientData[key]}`;
-    }
-  }, "");
+  return ICTUS_FORMAT_CSV_COLUMN_KEYS_MAP.map((key) => patientData[key]).join(
+    "|"
+  );
 };
 
 const patientSexCodes: Codes<PatientSex> = {
@@ -167,14 +156,7 @@ const evtModalityCodes: Codes<EVTModalityType> = {
 };
 
 const formatDateForExport = (date: Date): string => {
-  return `${date.getFullYear()}${("0" + (date.getMonth() + 1)).slice(-2)}${(
-    "0" + date.getDate()
-  ).slice(-2)}T${date
-    .toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-    .replace(":", "")}`;
+  return moment(date).format("YYYYMMDD[T]HHmm");
 };
 
 /**
@@ -182,9 +164,7 @@ const formatDateForExport = (date: Date): string => {
  * @param dateStr Date string to format YYYYMMDDTHHMM
  */
 const parseImportData = (dateStr: string): Date | null => {
-  const date = new Date(
-    dateStr.replace(/^(\d{4})(\d\d)(\d\d)[T](\d\d)(\d\d)$/, "$4:$5 $2/$3/$1")
-  );
+  const date = moment(dateStr).toDate();
 
   return isNaN(date.getTime()) ? null : date;
 };
@@ -409,12 +389,8 @@ export const formatPatientDataForExport = (
     }
   }
 
-  if (type !== "nominative") {
-    const id = patient.id;
-    formattedPatient.firstName = formattedPatient.lastName = id;
-    if (type === "enhanced pseudonymized") {
-      formattedPatient.IPP = id;
-    }
+  if (type === "enhanced pseudonymized") {
+    formattedPatient.idEvent = patient.id;
   }
 
   return formattedPatient;

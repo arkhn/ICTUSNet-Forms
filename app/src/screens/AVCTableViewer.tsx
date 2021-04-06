@@ -17,13 +17,21 @@ import {
   convertToIctusFormat,
   formatPatientDataForExport,
 } from "utils/formUtils";
-import { Container, Fab, makeStyles, Paper } from "@material-ui/core";
+import {
+  Container,
+  Fab,
+  makeStyles,
+  Paper,
+  TablePagination,
+} from "@material-ui/core";
 import TableViewer from "components/TableViewer";
 import CSVUploadButton from "components/CSVUploadButton";
 import CSVExportButton from "components/CSVExportButton";
 import Dialog from "components/Dialog";
 
 import { Add, Delete } from "@material-ui/icons";
+
+const ROWS_PER_PAGES = [25, 50, 100];
 
 const useStyles = makeStyles((theme) => ({
   redFab: {
@@ -58,8 +66,11 @@ const AVCTableViewer: React.FC<{}> = () => {
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const [patientIdsToDelete, setPatientIdsToDelete] = useState<string[]>([]);
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const { data, columns } = useAppSelector((state) => ({
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGES[0]);
+  const { data, columns, total } = useAppSelector((state) => ({
     data: state.patientForm.patients,
+    total: state.patientForm.totalPatients,
     columns: state.patientForm.patientColumnData,
   }));
 
@@ -120,9 +131,22 @@ const AVCTableViewer: React.FC<{}> = () => {
     fileDownload(csv, "patientForms.csv");
   };
 
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    _page: number
+  ) => {
+    setPage(_page);
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   useEffect(() => {
-    dispatch(getPatientsThunk());
-  }, [dispatch]);
+    dispatch(getPatientsThunk({ limit: rowsPerPage, page }));
+  }, [dispatch, rowsPerPage, page]);
 
   return (
     <Container maxWidth="xl">
@@ -155,14 +179,26 @@ const AVCTableViewer: React.FC<{}> = () => {
           </Fab>
         </div>
       </div>
-      <Paper style={{ height: 700 }}>
-        <TableViewer
-          data={data}
-          columns={columns}
-          onClickDelete={openDialog}
-          onClickEdit={onEditPatient}
-          onRowSelect={setSelectedRowIds}
-          selectedRowIds={selectedRowIds}
+      <Paper>
+        <div style={{ height: 700 }}>
+          <TableViewer
+            data={data}
+            columns={columns}
+            onClickDelete={openDialog}
+            onClickEdit={onEditPatient}
+            onRowSelect={setSelectedRowIds}
+            selectedRowIds={selectedRowIds}
+          />
+        </div>
+        <TablePagination
+          rowsPerPageOptions={ROWS_PER_PAGES}
+          component="div"
+          count={total ?? 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          labelRowsPerPage={t("patientsPerPage")}
         />
       </Paper>
       <Dialog
