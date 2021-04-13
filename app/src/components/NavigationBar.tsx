@@ -38,7 +38,7 @@ const NavigationBar: React.FC<{}> = () => {
             <Link className={classes.link} to={"/avc_viewer"}>
               <Logo className={classes.logo} />
               <Typography variant="h6" color="primary">
-                AVC Forms
+                ICTUSNet
               </Typography>
             </Link>
           </div>

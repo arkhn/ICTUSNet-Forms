@@ -1,4 +1,4 @@
-# AVC Forms App
+# ICTUSNet Forms App
 
 This project allows user to set patients AVC related data via a form. It allows CSV import/export and implements Snowmed terminology
 
