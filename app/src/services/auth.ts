@@ -68,22 +68,21 @@ export const addPatient = async (patient: PatientData): Promise<boolean> => {
   return addPatientResponse.status === 201;
 };
 
-const getPatientUrl = async (patientId: string): Promise<string | null> => {
+const getPatientUrl = async (patientId: string, params?: string): Promise<string | null> => {
   const patientsResponse = await api.get<{
     count: number;
+    next: string | null;
     results: {
       data: { [dataKey: string]: string };
       code: string;
       url: string;
     }[];
-  }>("patients/");
-  const { results } = patientsResponse.data;
+  }>(`patients/${params ?? ""}`);
+  const { results, next } = patientsResponse.data;
   const patient = results.find((r) => r.code === patientId);
-  if (patient) {
-    return patient.url;
-  } else {
-    return null;
-  }
+  if (patient) return patient.url;
+  if (next) return getPatientUrl(patientId, (new URL(next)).search)
+  return null;
 };
 
 export const deletePatient = async (patientId: string): Promise<boolean> => {
