@@ -1,18 +1,20 @@
 import React from "react";
+
 import { NavBar } from "@arkhn/ui";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as Logo } from "../assets/img/arkhn-logo.svg";
-import { Typography, IconButton, makeStyles } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import { ExitToApp } from "@material-ui/icons";
 import LanguageSelect from "./LanguageSelect";
 import { useAppSelector, useAppDispatch } from "state/store";
 import { logout } from "state/user";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   logo: {
-    height: 27,
-    width: 21,
+    maxHeight: 27,
+    width: "auto",
+    height: "auto",
     marginRight: 16,
   },
   link: {
@@ -22,6 +24,11 @@ const useStyles = makeStyles(() => ({
   },
   titleContainer: {
     flexGrow: 1,
+  },
+  logoContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 }));
 
@@ -36,10 +43,14 @@ const NavigationBar: React.FC<{}> = () => {
         <>
           <div className={classes.titleContainer}>
             <Link className={classes.link} to={"/avc_viewer"}>
-              <Logo className={classes.logo} />
-              <Typography variant="h6" color="primary">
-                ICTUSNet
-              </Typography>
+              <div className={classes.logoContainer}>
+                <Logo className={classes.logo} />
+                <img
+                  className={classes.logo}
+                  src="ictus-logo-small.png"
+                  alt="ICTUSNet Logo"
+                />
+              </div>
             </Link>
           </div>
           {user && user.access && (

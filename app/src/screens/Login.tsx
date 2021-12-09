@@ -1,11 +1,25 @@
 import React, { useEffect } from "react";
 import { FormBuilder } from "@arkhn/ui";
 import { FormInputProperty } from "@arkhn/ui/lib/Form/InputTypes";
-import { Button, CircularProgress, Container } from "@material-ui/core";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  makeStyles,
+} from "@material-ui/core";
 import { loginThunk } from "state/user";
 import { useAppDispatch, useAppSelector } from "state/store";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+const useStyles = makeStyles((theme) => ({
+  logo: {
+    maxWidth: "100%",
+    width: "auto",
+    height: "auto",
+    marginRight: 16,
+  },
+}));
 
 type LoginData = {
   username: string;
@@ -13,6 +27,7 @@ type LoginData = {
 };
 
 const Login: React.FC<{}> = () => {
+  const classes = useStyles();
   const dispatch = useAppDispatch();
   const history = useHistory();
   const { user } = useAppSelector((state) => state);
@@ -53,6 +68,7 @@ const Login: React.FC<{}> = () => {
       <Button type="submit" form="login-form" fullWidth>
         {user?.loading ? <CircularProgress /> : t("login")}
       </Button>
+      <img className={classes.logo} src="ictus-logo.png" alt="ICTUSNet Logo" />
     </Container>
   );
 };
