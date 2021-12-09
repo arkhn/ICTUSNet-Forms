@@ -1,4 +1,5 @@
 # ICTUSnet
+![alt text](app/public/ictus-logo.png "ICTUSNet Logo")
 
 ## Requirements
 * Docker:  https://docs.docker.com/engine/install/
@@ -19,3 +20,4 @@
 * The default port (`8080`) can be changed in the `nginx` configuration in `docker-compose.yml`
 ## Administration interface
 To manage user groups and users, visit `host/api/admin/` (default `localhost:8080/api/admin`)
+
